@@ -739,10 +739,20 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_generate_client_device_uid(
     if (err != CHIAKI_ERR_SUCCESS)
         return err;
 
-    *out_size += sprintf(out, "%s", DUID_PREFIX);
-    for (int i = 0; i < sizeof(random_bytes); i++)
+    // CHIAKI_DUID_STR_SIZE (checked above) fits prefix + 2 hex chars per random byte + '\0'
+    size_t pos = 0;
+    int written = snprintf(out, CHIAKI_DUID_STR_SIZE, "%s", DUID_PREFIX);
+    if (written < 0 || (size_t)written >= CHIAKI_DUID_STR_SIZE)
+        return CHIAKI_ERR_BUF_TOO_SMALL;
+    pos = (size_t)written;
+    *out_size += (size_t)written;
+    for (size_t i = 0; i < sizeof(random_bytes); i++)
     {
-        *out_size += sprintf(out + strlen(out), "%02x", random_bytes[i]);
+        written = snprintf(out + pos, CHIAKI_DUID_STR_SIZE - pos, "%02x", random_bytes[i]);
+        if (written < 0 || (size_t)written >= CHIAKI_DUID_STR_SIZE - pos)
+            return CHIAKI_ERR_BUF_TOO_SMALL;
+        pos += (size_t)written;
+        *out_size += (size_t)written;
     }
 
     return CHIAKI_ERR_SUCCESS;
@@ -1383,7 +1393,6 @@ static ChiakiErrorCode http_ps4_session_wakeup(Session *session)
         goto cleanup_json;
     }
 
-    char host_url_starter[128];
     char host_url[128];
     if (strlen(user_profile_url) >= sizeof(host_url))
     {
@@ -1395,21 +1404,14 @@ static ChiakiErrorCode http_ps4_session_wakeup(Session *session)
     // Get just the base url
     remove_substring(host_url, "https://");
     remove_substring(host_url, "http://");
-    strcpy(host_url_starter, host_url);
-    char *ptr = strtok(host_url_starter, "/");
-    if(!(ptr == (host_url_starter + strlen(host_url_starter))))
-        strcpy(host_url, ptr);
-    memset(host_url_starter, 0, 128);
-    strcpy(host_url_starter, host_url);
-    ptr = strtok(host_url_starter, "?");
-    // if string found, copy part before string found, else leave string as-is
-    if(!(ptr == (host_url_starter + strlen(host_url_starter))))
-        strcpy(host_url, ptr);
-    memset(host_url_starter, 0, 128);
-    strcpy(host_url_starter, host_url);
-    ptr = strtok(host_url_starter, "#");
-    if(!(ptr == (host_url_starter + strlen(host_url_starter))))
-        strcpy(host_url, ptr);
+    // Cut off path, query and fragment (everything from the first '/', '?' or '#')
+    host_url[strcspn(host_url, "/?#")] = '\0';
+    if (host_url[0] == '\0')
+    {
+        CHIAKI_LOGE(session->log, "http_ps4_session_wakeup: user profile url has no host, rejecting");
+        err = CHIAKI_ERR_UNKNOWN;
+        goto cleanup_json;
+    }
 
     curl_easy_cleanup(curl);
     free(response_data.data);
@@ -5090,6 +5092,17 @@ static ChiakiErrorCode receive_request_send_response_ps(Session *session, chiaki
 }
 
 /**
+ * Append str to the NUL-terminated buffer buf of size buf_size, truncating if it does not fit
+ */
+static void append_state_str(char *buf, size_t buf_size, const char *str)
+{
+    size_t len = strlen(buf);
+    if (len >= buf_size)
+        return;
+    snprintf(buf + len, buf_size - len, "%s", str);
+}
+
+/**
  * Log the current session state
  *
  * @param[in] session A pointer to the session context
@@ -5100,44 +5113,44 @@ static void log_session_state(Session *session)
     state_str[0] = '[';
     state_str[1] = '\0';
     if (session->state & SESSION_STATE_INIT)
-        strcat(state_str, " ✅INIT");
+        append_state_str(state_str, sizeof(state_str), " ✅INIT");
     if (session->state & SESSION_STATE_WS_OPEN)
-        strcat(state_str, " ✅WS_OPEN");
+        append_state_str(state_str, sizeof(state_str), " ✅WS_OPEN");
     if (session->state & SESSION_STATE_DELETED)
-        strcat(state_str, " ✅DELETED");
+        append_state_str(state_str, sizeof(state_str), " ✅DELETED");
     if (session->state & SESSION_STATE_CREATED)
-        strcat(state_str, " ✅CREATED");
+        append_state_str(state_str, sizeof(state_str), " ✅CREATED");
     if (session->state & SESSION_STATE_STARTED)
-        strcat(state_str, " ✅STARTED");
+        append_state_str(state_str, sizeof(state_str), " ✅STARTED");
     if (session->state & SESSION_STATE_CLIENT_JOINED)
-        strcat(state_str, " ✅CLIENT_JOINED");
+        append_state_str(state_str, sizeof(state_str), " ✅CLIENT_JOINED");
     if (session->state & SESSION_STATE_DATA_SENT)
-        strcat(state_str, " ✅DATA_SENT");
+        append_state_str(state_str, sizeof(state_str), " ✅DATA_SENT");
     if (session->state & SESSION_STATE_CONSOLE_JOINED)
-        strcat(state_str, " ✅CONSOLE_JOINED");
+        append_state_str(state_str, sizeof(state_str), " ✅CONSOLE_JOINED");
     if (session->state & SESSION_STATE_CUSTOMDATA1_RECEIVED)
-        strcat(state_str, " ✅CUSTOMDATA1_RECEIVED");
+        append_state_str(state_str, sizeof(state_str), " ✅CUSTOMDATA1_RECEIVED");
     if (session->state &SESSION_STATE_CTRL_OFFER_RECEIVED)
-        strcat(state_str, " ✅CTRL_OFFER_RECEIVED");
+        append_state_str(state_str, sizeof(state_str), " ✅CTRL_OFFER_RECEIVED");
     if (session->state & SESSION_STATE_CTRL_OFFER_SENT)
-        strcat(state_str, " ✅CTRL_OFFER_SENT");
+        append_state_str(state_str, sizeof(state_str), " ✅CTRL_OFFER_SENT");
     if (session->state & SESSION_STATE_CTRL_CONSOLE_ACCEPTED)
-        strcat(state_str, " ✅CTRL_CONSOLE_ACCEPTED");
+        append_state_str(state_str, sizeof(state_str), " ✅CTRL_CONSOLE_ACCEPTED");
     if (session->state & SESSION_STATE_CTRL_CLIENT_ACCEPTED)
-        strcat(state_str, " ✅CTRL_CLIENT_ACCEPTED");
+        append_state_str(state_str, sizeof(state_str), " ✅CTRL_CLIENT_ACCEPTED");
     if (session->state & SESSION_STATE_CTRL_ESTABLISHED)
-        strcat(state_str, " ✅CTRL_ESTABLISHED");
+        append_state_str(state_str, sizeof(state_str), " ✅CTRL_ESTABLISHED");
     if (session->state & SESSION_STATE_DATA_OFFER_RECEIVED)
-        strcat(state_str, " ✅DATA_OFFER_RECEIVED");
+        append_state_str(state_str, sizeof(state_str), " ✅DATA_OFFER_RECEIVED");
     if (session->state & SESSION_STATE_DATA_OFFER_SENT)
-        strcat(state_str, " ✅DATA_OFFER_SENT");
+        append_state_str(state_str, sizeof(state_str), " ✅DATA_OFFER_SENT");
     if (session->state & SESSION_STATE_DATA_CONSOLE_ACCEPTED)
-        strcat(state_str, " ✅DATA_CONSOLE_ACCEPTED");
+        append_state_str(state_str, sizeof(state_str), " ✅DATA_CONSOLE_ACCEPTED");
     if (session->state & SESSION_STATE_DATA_CLIENT_ACCEPTED)
-        strcat(state_str, " ✅DATA_CLIENT_ACCEPTED");
+        append_state_str(state_str, sizeof(state_str), " ✅DATA_CLIENT_ACCEPTED");
     if (session->state & SESSION_STATE_DATA_ESTABLISHED)
-        strcat(state_str, " ✅DATA_ESTABLISHED");
-    strcat(state_str, " ]");
+        append_state_str(state_str, sizeof(state_str), " ✅DATA_ESTABLISHED");
+    append_state_str(state_str, sizeof(state_str), " ]");
     CHIAKI_LOGV(session->log, "Holepunch session state: %d = %s", session->state, state_str);
 }
 

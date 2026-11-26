@@ -91,45 +91,49 @@ CHIAKI_EXPORT void chiaki_rudp_send_buffer_fini(ChiakiRudpSendBuffer *send_buffe
 	free(send_buffer->packets);
 }
 
-static void GetRudpPacketType(ChiakiRudpSendBuffer *send_buffer, uint16_t packet_type, char *ptype)
+static void GetRudpPacketType(ChiakiRudpSendBuffer *send_buffer, uint16_t packet_type, char *ptype, size_t ptype_size)
 {
     RudpPacketType type = htons(packet_type);
+    const char *name = NULL;
     switch(type)
     {
         case INIT_REQUEST:
-			strcpy(ptype, "Init Request");
-			break;
+            name = "Init Request";
+            break;
         case INIT_RESPONSE:
-            strcpy(ptype, "Init Response");
-			break;
+            name = "Init Response";
+            break;
         case COOKIE_REQUEST:
-			strcpy(ptype, "Cookie Request");
+            name = "Cookie Request";
             break;
         case COOKIE_RESPONSE:
-            strcpy(ptype, "Cookie Response");
-			break;
+            name = "Cookie Response";
+            break;
         case SESSION_MESSAGE:
-			strcpy(ptype, "Session Message");
+            name = "Session Message";
             break;
         case STREAM_CONNECTION_SWITCH_ACK:
-			strcpy(ptype, "Takion Switch Ack");
+            name = "Takion Switch Ack";
             break;
         case ACK:
-            strcpy(ptype, "Ack");
-			break;
+            name = "Ack";
+            break;
         case CTRL_MESSAGE:
-            strcpy(ptype, "Ctrl Message");
-			break;
+            name = "Ctrl Message";
+            break;
         case UNKNOWN:
-            strcpy(ptype, "Unknown");
-			break;
+            name = "Unknown";
+            break;
         case FINISH:
-			strcpy(ptype, "Finish");
+            name = "Finish";
             break;
         default:
-			sprintf(ptype, "Undefined packet type 0x%04x", type);
-			break;
+            break;
     }
+    if(name)
+        snprintf(ptype, ptype_size, "%s", name);
+    else
+        snprintf(ptype, ptype_size, "Undefined packet type 0x%04x", (unsigned int)type);
 }
 
 CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_buffer_push(ChiakiRudpSendBuffer *send_buffer, ChiakiSeqNum16 seq_num, uint8_t *buf, size_t buf_size)
@@ -307,8 +311,10 @@ static void rudp_send_buffer_resend(ChiakiRudpSendBuffer *send_buffer)
 					i-= 1;
 				continue;
 			}
-			char packet_type[29] = {0};
-			GetRudpPacketType(send_buffer, *((uint16_t *)(packet->buf + 6)), packet_type);
+			char packet_type[32] = {0};
+			uint16_t raw_packet_type;
+			memcpy(&raw_packet_type, packet->buf + 6, sizeof(raw_packet_type));
+			GetRudpPacketType(send_buffer, raw_packet_type, packet_type, sizeof(packet_type));
 			CHIAKI_LOGI(send_buffer->log, "rudp Send Buffer re-sending packet with seqnum %#lx and type %s, tries: %llu", (unsigned long)packet->seq_num, packet_type, (unsigned long long)packet->tries);
 			packet->last_send_ms = now;
 			chiaki_rudp_send_raw(send_buffer->rudp, packet->buf, packet->buf_size);
