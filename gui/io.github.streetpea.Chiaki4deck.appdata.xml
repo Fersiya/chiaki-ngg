@@ -25,6 +25,15 @@
   <update_contact>streetpea@proton.me</update_contact>
   <content_rating type="oars-1.1" />
   <releases>
+    <release date="2026-11-26" version="1.10.2">
+      <description>
+        <p>This release provides the following improvements:</p>
+        <ul>
+          <li>fix a crash when waking a PS4 if the console's profile URL has no host, and harden the PS4 wakeup host parsing</li>
+          <li>make device ID generation, session state logging and RUDP packet type logging use bounded string functions instead of unchecked strcpy, sprintf and strcat, and read the RUDP packet type without an unaligned access</li>
+        </ul>
+      </description>
+    </release>
     <release date="2026-11-03" version="1.10.1">
       <description>
         <p>This release provides the following improvements:</p>

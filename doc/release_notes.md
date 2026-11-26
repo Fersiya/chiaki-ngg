@@ -48,6 +48,13 @@ For flatpak, you can run with `--env=SDL_AUDIODRIVER=pulse` to use pulse instead
 
 ## Updates
 
+### v1.10.2
+
+This release provides the following improvements:
+
+- fix a crash when waking a PS4 if the console's profile URL has no host, and harden the PS4 wakeup host parsing
+- make device ID generation, session state logging and RUDP packet type logging use bounded string functions instead of unchecked `strcpy`, `sprintf` and `strcat`, and read the RUDP packet type without an unaligned access
+
 ### v1.10.1
 
 This release provides the following improvements:
