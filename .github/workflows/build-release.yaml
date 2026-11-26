@@ -8,7 +8,7 @@ jobs:
   create-release:
     name: Upload release
     runs-on: ubuntu-latest
-    # RELEASE_PAT is an environment secret, so publishing waits for approval
+    # RELEASE_PAT (environment secret) is used if set, otherwise the built-in GITHUB_TOKEN
     environment: release
     permissions:
       contents: write
@@ -30,7 +30,7 @@ jobs:
         prerelease: ${{ contains(github.ref_name, '-') }}
         allowUpdates: true
         bodyFile: "${{ github.workspace }}/doc/release_notes.md"
-        token: "${{ secrets.RELEASE_PAT }}"
+        token: "${{ secrets.RELEASE_PAT || secrets.GITHUB_TOKEN }}"
     outputs:
       upload_url: ${{ steps.maker.outputs.upload_url }}
 
