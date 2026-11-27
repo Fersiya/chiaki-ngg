@@ -168,11 +168,11 @@ public:
         valueFont.setBold(true);
 
         bitrateRow = makeRow(tr("Mbps"), QColor(QStringLiteral("#00a7ff")), titleFont, valueFont, bitrateValue);
-        queueRow = makeRow(tr("queue depth avg"), QColor(QStringLiteral("#90caf9")), titleFont, valueFont, queueDepthValue);
-        pendingRow = makeRow(tr("pending frame age"), QColor(QStringLiteral("#90caf9")), titleFont, valueFont, pendingAgeValue);
-        packetLossRow = makeRow(tr("packet loss"), QColor(QStringLiteral("#ef9a9a")), titleFont, valueFont, packetLossValue);
-        droppedFramesRow = makeRow(tr("dropped frames"), QColor(QStringLiteral("#ef9a9a")), titleFont, valueFont, droppedFramesValue);
-        lostFramesRow = makeRow(tr("lost frames"), QColor(QStringLiteral("#ef9a9a")), titleFont, valueFont, lostFramesValue);
+        queueRow = makeRow(tr("Средняя глубина очереди"), QColor(QStringLiteral("#90caf9")), titleFont, valueFont, queueDepthValue);
+        pendingRow = makeRow(tr("Возраст ожидающего кадра"), QColor(QStringLiteral("#90caf9")), titleFont, valueFont, pendingAgeValue);
+        packetLossRow = makeRow(tr("Потеря пакетов"), QColor(QStringLiteral("#ef9a9a")), titleFont, valueFont, packetLossValue);
+        droppedFramesRow = makeRow(tr("Пропущенные кадры"), QColor(QStringLiteral("#ef9a9a")), titleFont, valueFont, droppedFramesValue);
+        lostFramesRow = makeRow(tr("Потерянные кадры"), QColor(QStringLiteral("#ef9a9a")), titleFont, valueFont, lostFramesValue);
 
         outer->addWidget(panel, 0, Qt::AlignRight | Qt::AlignVCenter);
 
@@ -6005,9 +6005,9 @@ void QmlMainWindow::createSwapchain()
                 << "surface_renderable=" << surface_renderable;
             if (surface_renderable && failures >= 60 && failure_duration_us >= 3000000) {
                 handleVulkanRendererFallback(
-                    tr("Vulkan renderer stalled"),
-                    tr("The Vulkan surface could not recover. Chiaki-ng will relaunch with OpenGL for this run only."),
-                    tr("Vulkan surface creation failed repeatedly while the window was visible. OpenGL is being used for this launch only."));
+                    tr("Сбой рендерера Vulkan"),
+                    tr("Не удалось восстановить поверхность Vulkan. В этом запуске Chiaki-ng будет перезапущен с OpenGL."),
+                    tr("Не удалось несколько раз создать поверхность Vulkan при отображаемом окне. В этом запуске используется OpenGL."));
             } else {
                 swapchain_recreate_pending.storeRelease(1);
                 QMetaObject::invokeMethod(this, [this]() {
@@ -6403,9 +6403,9 @@ void QmlMainWindow::confirmVulkanStartup()
 void QmlMainWindow::handleVulkanDeviceLost(const QString &reason)
 {
     handleVulkanRendererFallback(
-        tr("Vulkan device lost"),
-        tr("The Vulkan renderer stopped responding. Chiaki-ng will relaunch with OpenGL for this run only.\n\nReason: %1").arg(reason),
-        tr("Vulkan device was lost. OpenGL is being used for this launch only. Reason: %1").arg(reason));
+        tr("Потеряно устройство Vulkan"),
+        tr("Рендерер Vulkan перестал отвечать. В этом запуске Chiaki-ng будет перезапущен с OpenGL.\n\nПричина: %1").arg(reason),
+        tr("Устройство Vulkan потеряно. В этом запуске используется OpenGL. Причина: %1").arg(reason));
 }
 
 void QmlMainWindow::handleVulkanRendererFallback(const QString &title, const QString &message, const QString &fallback_reason)
@@ -7012,9 +7012,9 @@ void QmlMainWindow::render()
                 << "surface_renderable=" << surface_renderable;
             if (surface_renderable && failures >= 60 && failure_duration_us >= 3000000) {
                 handleVulkanRendererFallback(
-                    tr("Vulkan renderer stalled"),
-                    tr("The Vulkan swapchain could not recover. Chiaki-ng will relaunch with OpenGL for this run only."),
-                    tr("Vulkan swapchain failed repeatedly while the window was visible. OpenGL is being used for this launch only."));
+                    tr("Сбой рендерера Vulkan"),
+                    tr("Не удалось восстановить цепочку буферов Vulkan. В этом запуске Chiaki-ng будет перезапущен с OpenGL."),
+                    tr("Не удалось несколько раз создать цепочку буферов Vulkan при отображаемом окне. В этом запуске используется OpenGL."));
             } else {
                 swapchain_recreate_pending.storeRelease(1);
                 QMetaObject::invokeMethod(this, [this]() {
