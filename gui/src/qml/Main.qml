@@ -488,7 +488,7 @@ Item {
                 Layout.alignment: Qt.AlignCenter
 
                 Button {
-                    text: qsTr("OK")
+                    text: qsTr("ОК")
                     Material.background: Material.accent
                     flat: true
                     leftPadding: 50
