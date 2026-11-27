@@ -937,7 +937,7 @@ DialogView {
 
                     C.ComboBox {
                         Layout.preferredWidth: 400
-                        model: [qsTr("Пользовательский"), qsTr("По умолчанию"), qsTr("High Quality")]
+                        model: [qsTr("Пользовательский"), qsTr("По умолчанию"), qsTr("Высокое качество")]
                         currentIndex: Chiaki.settings.placeboPeakDetectionPreset
                         onActivated: index => Chiaki.settings.placeboPeakDetectionPreset = index
                         visible: Chiaki.settings.placeboPeakDetectionEnabled
@@ -1161,7 +1161,7 @@ DialogView {
 
                     C.ComboBox {
                         Layout.preferredWidth: 400
-                        model: [qsTr("Пользовательский"), qsTr("По умолчанию"), qsTr("High Quality")]
+                        model: [qsTr("Пользовательский"), qsTr("По умолчанию"), qsTr("Высокое качество")]
                         currentIndex: Chiaki.settings.placeboЦветMappingPreset
                         onActivated: index => Chiaki.settings.placeboЦветMappingPreset = index
                         visible: Chiaki.settings.placeboЦветMappingEnabled
@@ -1180,7 +1180,7 @@ DialogView {
                     }
 
                     C.Button {
-                        text: qsTr("Open")
+                        text: qsTr("Открыть")
                         onClicked: root.showPlaceboЦветMappingDialog()
                         visible: Chiaki.settings.placeboЦветMappingEnabled && Chiaki.settings.placeboЦветMappingPreset == 0
                         Material.roundedScale: Material.SmallScale
