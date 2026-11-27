@@ -62,7 +62,7 @@ Dialog {
             id: label
             Keys.onEscapePressed: dialog.reject()
             Keys.onReturnPressed: dialog.accept()
-            Keys.onYesPressed: dialog.close()
+            Keys.onДаPressed: dialog.close()
         }
 
         RowLayout {
