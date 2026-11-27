@@ -177,16 +177,16 @@ Item {
                     if(Chiaki.settings.dpadTouchEnabled)
                     {
                         if(Chiaki.settings.audioVideoDisabled == 0x01)
-                            qsTr("Audio Disabled in settings\n") + qsTr("Press %1 to open stream menu").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O") + "\n" + qsTr("Press %1 to toggle between regular dpad and dpad touch").arg(Chiaki.settings.stringForDpadShortcut())
+                            qsTr("Звук отключён в настройках\n") + qsTr("Нажмите %1, чтобы открыть меню трансляции").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O") + "\n" + qsTr("Нажмите %1, чтобы переключить обычную крестовину и сенсорную крестовину").arg(Chiaki.settings.stringForDpadShortcut())
                         else
-                            qsTr("Press %1 to open stream menu").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O") + "\n" + qsTr("Press %1 to toggle between regular dpad and dpad touch").arg(Chiaki.settings.stringForDpadShortcut())
+                            qsTr("Нажмите %1, чтобы открыть меню трансляции").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O") + "\n" + qsTr("Нажмите %1, чтобы переключить обычную крестовину и сенсорную крестовину").arg(Chiaki.settings.stringForDpadShortcut())
                     }
                     else
                     {
                         if(Chiaki.settings.audioVideoDisabled == 0x01)
-                            qsTr("Audio Disabled in settings\n") + qsTr("Press %1 to open stream menu").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O")
+                            qsTr("Звук отключён в настройках\n") + qsTr("Нажмите %1, чтобы открыть меню трансляции").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O")
                         else
-                            qsTr("Press %1 to open stream menu").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O")
+                            qsTr("Нажмите %1, чтобы открыть меню трансляции").arg(Chiaki.controllers.length ? Chiaki.settings.stringForStreamMenuShortcut() : "Ctrl+O")
                     }
                 }
                 visible: sessionLoading
@@ -212,7 +212,7 @@ Item {
                 }
                 horizontalAlignment: Text.AlignHCenter
                 font.pixelSize: 20
-                text: (Chiaki.settings.audioVideoDisabled & 0x01) ? qsTr("You have disabled audio and video in your settings.\nTo re-enable change Audio/Video to Audio and Video Enabled in the General tab of the settings.") : qsTr("You have disabled video in your settings.\nTo re-enable change Audio/Video to Audio and Video Enabled in the General tab of the settings.")
+                text: (Chiaki.settings.audioVideoDisabled & 0x01) ? qsTr("Вы отключили звук и видео в настройках.\nЧтобы включить их снова, выберите «Звук и видео включены» в разделе «Общие» настроек.") : qsTr("Вы отключили видео в настройках.\nЧтобы включить его снова, выберите «Звук и видео включены» в разделе «Общие» настроек.")
                 visible: !sessionLoading && !sessionError && (Chiaki.settings.audioVideoDisabled & 0x02)
             }
 
@@ -244,9 +244,9 @@ Item {
     }
 
     ColumnLayout {
-        id: cantDisplayMessage
+        id: cantЭкранMessage
         anchors.centerIn: parent
-        opacity: Chiaki.window.hasVideo && Chiaki.session && Chiaki.session.cantDisplay ? 1.0 : 0.0
+        opacity: Chiaki.window.hasVideo && Chiaki.session && Chiaki.session.cantЭкран ? 1.0 : 0.0
         visible: opacity
         spacing: 30
 
@@ -263,14 +263,14 @@ Item {
 
         Label {
             Layout.alignment: Qt.AlignCenter
-            text: qsTr("The screen contains content that can't be displayed using Remote Play.")
+            text: qsTr("На экране отображается содержимое, которое нельзя передать через Remote Play.")
         }
 
         Button {
             id: goToHomeButton
             Layout.alignment: Qt.AlignCenter
             Layout.preferredHeight: 60
-            text: qsTr("Go to Home Screen")
+            text: qsTr("Перейти на главный экран")
             Material.background: activeFocus ? parent.Material.accent : undefined
             Material.roundedScale: Material.SmallScale
             onClicked: Chiaki.sessionGoHome()
@@ -336,7 +336,7 @@ Item {
 
                 Label {
                     Layout.alignment: Qt.AlignRight
-                    text: qsTr("queue depth avg")
+                    text: qsTr("Средняя глубина очереди")
                     font.pixelSize: 15
                     opacity: Chiaki.session ? 1 : 0
                     visible: opacity > 0
@@ -358,7 +358,7 @@ Item {
 
                 Label {
                     Layout.alignment: Qt.AlignRight
-                    text: qsTr("pending frame age")
+                    text: qsTr("Возраст ожидающего кадра")
                     font.pixelSize: 15
                     opacity: Chiaki.session ? 1 : 0
                     visible: opacity > 0
@@ -381,7 +381,7 @@ Item {
                 Label {
                     Layout.alignment: Qt.AlignRight
                     id: statsPacketLossLabel
-                    text: qsTr("packet loss")
+                    text: qsTr("Потеря пакетов")
                     font.pixelSize: 15
                     opacity: Chiaki.session ? 1 : 0
                     visible: opacity > 0
@@ -403,7 +403,7 @@ Item {
 
                 Label {
                     Layout.alignment: Qt.AlignRight
-                    text: qsTr("dropped frames")
+                    text: qsTr("Пропущенные кадры")
                     font.pixelSize: 15
                     opacity: Chiaki.session ? 1 : 0
                     visible: opacity > 0
@@ -426,7 +426,7 @@ Item {
 
                 Label {
                     Layout.alignment: Qt.AlignRight
-                    text: qsTr("lost frames")
+                    text: qsTr("Потерянные кадры")
                     font.pixelSize: 15
                     opacity: Chiaki.session ? 1 : 0
                     visible: opacity > 0
@@ -524,7 +524,7 @@ Item {
                         leftMargin: 10
                     }
                     text: {
-                        ((parent.value / 128.0) * 100).toFixed(0) + qsTr("% Volume")
+                        ((parent.value / 128.0) * 100).toFixed(0) + qsTr("% громкости")
                     }
                 }
             }
@@ -537,7 +537,7 @@ Item {
             ToolButton {
                 id: muteButton
                 Layout.rightMargin: 20
-                text: qsTr("Mic")
+                text: qsTr("Микрофон")
                 padding: 10
                 checkable: true
                 enabled: Chiaki.session && Chiaki.session.connected
@@ -588,7 +588,7 @@ Item {
                     }
                     text: {
                         if(parent.value === -1)
-                            qsTr("No Black Bars")
+                            qsTr("Без чёрных полос")
                         else if(parent.value >= 0)
                             qsTr((parent.value + 1).toFixed(2)) + qsTr(" x")
                         else
@@ -715,11 +715,11 @@ Item {
 
             ToolButton {
                 id: displaySettingsButton
-                text: qsTr("Display")
+                text: qsTr("Экран")
                 padding: 10
                 checkable: false
                 icon.source: "qrc:/icons/settings-20px.svg";
-                onClicked: root.openDisplaySettings()
+                onClicked: root.openЭкранSettings()
                 KeyNavigation.left: customButton
                 KeyNavigation.right: {
                     if(Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.Custom)
@@ -786,8 +786,8 @@ Item {
                     if (!Chiaki.session)
                         return "";
                     if (Chiaki.session.connected)
-                        return qsTr("Connected to <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
-                    return qsTr("Connecting to <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
+                        return qsTr("Подключено к <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
+                    return qsTr("Подключение к <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
                 }
 
                 RowLayout {
@@ -798,7 +798,7 @@ Item {
                     }
 
                     Label {
-                        text: qsTr("packet loss")
+                        text: qsTr("Потеря пакетов")
                         font.pixelSize: 15
                         opacity: parent.visible && Chiaki.session ? 1.0 : 0.0
                         visible: opacity
@@ -820,7 +820,7 @@ Item {
 
                     Label {
                         Layout.leftMargin: droppedFramesLabel.width + 6
-                        text: qsTr("dropped frames")
+                        text: qsTr("Пропущенные кадры")
                         font.pixelSize: 15
                         opacity: parent.visible && Chiaki.window.droppedFrames ? 1.0 : 0.0
                         visible: opacity
@@ -892,9 +892,9 @@ Item {
         open: useSeparateMenuWindow && menuController.open
         closing: useSeparateMenuWindow && menuController.closing
         onCloseRequested: menuController.close()
-        onDisplaySettingsRequested: {
+        onЭкранSettingsRequested: {
             menuController.close();
-            root.openDisplaySettings();
+            root.openЭкранSettings();
         }
         onPlaceboSettingsRequested: {
             menuController.close();
@@ -933,7 +933,7 @@ Item {
         ColumnLayout {
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Disconnect Session")
+                text: qsTr("Отключить сеанс")
                 font.bold: true
                 font.pixelSize: 24
             }
@@ -941,7 +941,7 @@ Item {
             Label {
                 Layout.topMargin: 10
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Do you want the Console to go into sleep mode?")
+                text: qsTr("Перевести консоль в режим покоя?")
                 font.pixelSize: 20
             }
 
@@ -955,7 +955,7 @@ Item {
                     Layout.preferredWidth: 200
                     Layout.minimumHeight: 80
                     Layout.maximumHeight: 80
-                    text: qsTr("Sleep")
+                    text: qsTr("Режим покоя")
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
@@ -1010,7 +1010,7 @@ Item {
                 closeAction = 0;
                 view.updateSeparateDialogGeometry(width, height);
                 requestActivate();
-                view.grabInput(separateSleepButton);
+                view.grabInput(separateРежим покояButton);
             } else {
                 view.releaseInput();
                 if (closeAction)
@@ -1032,7 +1032,7 @@ Item {
 
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Disconnect Session")
+                text: qsTr("Отключить сеанс")
                 font.bold: true
                 font.pixelSize: 24
             }
@@ -1040,7 +1040,7 @@ Item {
             Label {
                 Layout.topMargin: 10
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Do you want the Console to go into sleep mode?")
+                text: qsTr("Перевести консоль в режим покоя?")
                 font.pixelSize: 20
             }
 
@@ -1050,11 +1050,11 @@ Item {
                 spacing: 30
 
                 Button {
-                    id: separateSleepButton
+                    id: separateРежим покояButton
                     Layout.preferredWidth: 200
                     Layout.minimumHeight: 80
                     Layout.maximumHeight: 80
-                    text: qsTr("Sleep")
+                    text: qsTr("Режим покоя")
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
@@ -1076,7 +1076,7 @@ Item {
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
-                    KeyNavigation.left: separateSleepButton
+                    KeyNavigation.left: separateРежим покояButton
                     Keys.onReturnPressed: clicked()
                     Keys.onEscapePressed: separateSessionStopWindow.visible = false
                     onClicked: {
@@ -1093,10 +1093,10 @@ Item {
         parent: Overlay.overlay
         x: Math.round((root.width - width) / 2)
         y: Math.round((root.height - height) / 2)
-        title: qsTr("Console Login PIN")
+        title: qsTr("PIN-код входа в консоль")
         modal: true
         closePolicy: Popup.NoAutoClose
-        standardButtons: Dialog.Ok | Dialog.Cancel
+        standardButtons: Dialog.Ok | Dialog.Отмена
         onAboutToShow: {
             standardButton(Dialog.Ok).enabled = Qt.binding(function() {
                 return pinField.acceptableInput;
@@ -1168,7 +1168,7 @@ Item {
 
             Label {
                 Layout.alignment: Qt.AlignCenter
-                text: qsTr("Console Login PIN")
+                text: qsTr("PIN-код входа в консоль")
                 font.bold: true
                 font.pixelSize: 24
             }
@@ -1189,7 +1189,7 @@ Item {
                 spacing: 16
 
                 Button {
-                    text: qsTr("Cancel")
+                    text: qsTr("Отмена")
                     Keys.onReturnPressed: clicked()
                     onClicked: {
                         separateSessionPinWindow.visible = false;
@@ -1199,7 +1199,7 @@ Item {
 
                 Button {
                     id: separatePinOkButton
-                    text: qsTr("OK")
+                    text: qsTr("ОК")
                     enabled: separatePinField.acceptableInput
                     Keys.onReturnPressed: clicked()
                     onClicked: {
