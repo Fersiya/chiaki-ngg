@@ -6007,11 +6007,7 @@ static ChiakiErrorCode session_message_free(SessionMessage *message)
     return err;
 }
 
-/**
- * Gets stun servers from updated list of online STUN servers
- *
- * @param session Pointer to the holepunch session
- * @return ChiakiErrSuccess on success or error static bool parse_stun_port(const char *text, uint16_t *port)
+static bool parse_stun_port(const char *text, uint16_t *port)
 {
     if(!text || !*text || !port)
         return false;
@@ -6028,6 +6024,12 @@ static ChiakiErrorCode session_message_free(SessionMessage *message)
     return true;
 }
 
+/**
+ * Gets stun servers from updated list of online STUN servers
+ *
+ * @param session Pointer to the holepunch session
+ * @return ChiakiErrSuccess on success or error code on failure
+ */
 static ChiakiErrorCode get_stun_servers(Session *session)
 {
     ChiakiErrorCode err = CHIAKI_ERR_SUCCESS;
@@ -6252,9 +6254,6 @@ cleanup:
     free(response_data.data);
     if(curl)
         curl_easy_cleanup(curl);
-    return err;
-}
-
     return err;
 }
 
