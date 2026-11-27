@@ -10,8 +10,8 @@ import "controls" as C
 DialogView {
     property bool ps5: true
     property alias host: hostField.text
-    title: qsTr("Register Console")
-    buttonText: qsTr("Register")
+    title: qsTr("Зарегистрировать консоль")
+    buttonText: qsTr("Зарегистрировать")
     buttonEnabled: hostField.text.trim() && pin.acceptableInput && cpin.acceptableInput && (!onlineId.visible || onlineId.text.trim()) && (!accountId.visible || accountId.text.trim())
     StackView.onActivated: {
         if(Chiaki.settings.psnAccountId)
@@ -44,7 +44,7 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Host:")
+                text: qsTr("Консоль:")
             }
 
             C.TextField {
@@ -56,7 +56,7 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("PSN Online-ID:")
+                text: qsTr("Сетевой идентификатор PSN:")
                 visible: onlineId.visible
             }
 
@@ -64,13 +64,13 @@ DialogView {
                 id: onlineId
                 echoMode: Chiaki.settings.streamerMode ? TextInput.Password : TextInput.Normal
                 visible: ps4_7.checked
-                placeholderText: qsTr("username, case-sensitive")
+                placeholderText: qsTr("имя пользователя, с учётом регистра")
                 Layout.preferredWidth: 400
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("PSN Account-ID:")
+                text: qsTr("ID учётной записи PSN:")
                 visible: accountId.visible
             }
 
@@ -78,7 +78,7 @@ DialogView {
                 id: accountId
                 visible: !ps4_7.checked
                 echoMode: Chiaki.settings.streamerMode ? TextInput.Password : TextInput.Normal
-                placeholderText: qsTr("base64")
+                placeholderText: qsTr("Base64")
                 Layout.preferredWidth: 400 - loginButton.width - 10
                 KeyNavigation.priority: {
                     if(readOnly)
@@ -99,7 +99,7 @@ DialogView {
                     }
                     topPadding: 18
                     bottomPadding: 18
-                    text: qsTr("PSN Login")
+                    text: qsTr("Вход в PSN")
                     onClicked: stack.push(psnLoginDialogComponent, {login: true, callback: (id) => accountId.text = id})
                     visible: !Chiaki.settings.psnAccountId
                     Material.roundedScale: Material.SmallScale
@@ -118,7 +118,7 @@ DialogView {
                     }
                     topPadding: 18
                     bottomPadding: 18
-                    text: qsTr("Public Lookup")
+                    text: qsTr("Публичный поиск")
                     onClicked: stack.push(psnLoginDialogComponent, {login: false, callback: (id) => accountId.text = id})
                     visible: !Chiaki.settings.psnAccountId
                     Material.roundedScale: Material.SmallScale
@@ -132,7 +132,7 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Remote Play PIN:")
+                text: qsTr("PIN-код Remote Play:")
             }
 
             C.TextField {
@@ -151,7 +151,7 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Console Pin [Optional]")
+                text: qsTr("PIN-код консоли [необязательно]")
             }
 
             C.TextField {
@@ -163,7 +163,7 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Console:")
+                text: qsTr("Консоль:")
             }
 
             ColumnLayout {
@@ -172,19 +172,19 @@ DialogView {
                 C.RadioButton {
                     id: ps4_7
                     property int target: 800
-                    text: qsTr("PS4 Firmware < 7.0")
+                    text: qsTr("Прошивка PS4 < 7.0")
                 }
 
                 C.RadioButton {
                     id: ps4_75
                     property int target: 900
-                    text: qsTr("PS4 Firmware >= 7.0, < 8.0")
+                    text: qsTr("Прошивка PS4 >= 7.0 и < 8.0")
                 }
 
                 C.RadioButton {
                     id: ps4_8
                     property int target: 1000
-                    text: qsTr("PS4 Firmware >= 8.0")
+                    text: qsTr("Прошивка PS4 >= 8.0")
                     checked: !ps5
                 }
 
@@ -209,7 +209,7 @@ DialogView {
                 parent: Overlay.overlay
                 x: Math.round((root.width - width) / 2)
                 y: Math.round((root.height - height) / 2)
-                title: qsTr("Register Console")
+                title: qsTr("Зарегистрировать консоль")
                 modal: true
                 closePolicy: Popup.NoAutoClose
                 standardButtons: Dialog.Cancel
