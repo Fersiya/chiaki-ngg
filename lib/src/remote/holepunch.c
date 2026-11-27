@@ -6120,6 +6120,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         if(ptr == NULL)
         {
             CHIAKI_LOGW(session->log, "Problem reading stun server list port");
+            free(session->stun_server_list[i].host);
+            session->stun_server_list[i].host = NULL;
             session->num_stun_servers = i;
             err = CHIAKI_ERR_INVALID_DATA;
             goto cleanup;
@@ -6228,6 +6230,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         if(ptr == NULL)
         {
             CHIAKI_LOGW(session->log, "Problem reading stun server list port");
+            free(session->stun_server_list_ipv6[i].host);
+            session->stun_server_list_ipv6[i].host = NULL;
             session->num_stun_servers_ipv6 = i;
             err = CHIAKI_ERR_INVALID_DATA;
             goto cleanup;
@@ -6246,7 +6250,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
 
 cleanup:
     free(response_data.data);
-    curl_easy_cleanup(curl);
+    if(curl)
+        curl_easy_cleanup(curl);
     return err;
 }
 
