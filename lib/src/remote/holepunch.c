@@ -2086,15 +2086,20 @@ cleanup:
 static inline size_t curl_write_cb(
     void* ptr, size_t size, size_t nmemb, void* userdata)
 {
+    if (size != 0 && nmemb > SIZE_MAX / size)
+        return 0;
+
     size_t realsize = size * nmemb;
     HttpResponseData* response_data = (HttpResponseData*) userdata;
-    char* tmp = NULL;
-    tmp = realloc(response_data->data, response_data->size + realsize + 1);
+    if (realsize == SIZE_MAX || response_data->size > SIZE_MAX - realsize - 1)
+        return 0;
+
+    char* tmp = realloc(response_data->data, response_data->size + realsize + 1);
     if (tmp)
         response_data->data = tmp;
     else
     {
-        free(response_data->data);
+        // realloc failure leaves the original buffer valid; cleanup owns it.
         // TODO: Use Chiaki logger!
         fprintf(stderr, "curl_write_cb: realloc failed\n");
         return 0;
