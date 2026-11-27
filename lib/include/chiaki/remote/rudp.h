@@ -84,6 +84,14 @@ CHIAKI_EXPORT ChiakiRudp chiaki_rudp_init(chiaki_socket_t *sock,
 */
 CHIAKI_EXPORT void chiaki_rudp_reset_counter_header(ChiakiRudp rudp);
 
+/**
+ * Read the current local RUDP counter in a thread-safe manner.
+ *
+ * @param rudp Pointer to the RUDP instance
+ * @return The current local counter
+ */
+CHIAKI_EXPORT uint16_t chiaki_rudp_get_local_counter(ChiakiRudp rudp);
+
 CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_init_message(
     ChiakiRudp rudp);
 
