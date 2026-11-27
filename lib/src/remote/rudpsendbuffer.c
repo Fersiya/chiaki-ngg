@@ -77,9 +77,16 @@ error_mutex:
 
 CHIAKI_EXPORT void chiaki_rudp_send_buffer_fini(ChiakiRudpSendBuffer *send_buffer)
 {
-	send_buffer->should_stop = true;
-	ChiakiErrorCode err = chiaki_cond_signal(&send_buffer->cond);
+	// The worker reads should_stop while holding this mutex in its condition predicates.
+	// Update it under the same mutex to avoid a data race.
+	ChiakiErrorCode err = chiaki_mutex_lock(&send_buffer->mutex);
 	assert(err == CHIAKI_ERR_SUCCESS);
+	send_buffer->should_stop = true;
+	err = chiaki_cond_signal(&send_buffer->cond);
+	assert(err == CHIAKI_ERR_SUCCESS);
+	err = chiaki_mutex_unlock(&send_buffer->mutex);
+	assert(err == CHIAKI_ERR_SUCCESS);
+
 	err = chiaki_thread_join(&send_buffer->thread, NULL);
 	assert(err == CHIAKI_ERR_SUCCESS);
 
