@@ -16,6 +16,7 @@ static ULONG MySleepCallBack(PVOID windowsWakeSleep, ULONG messageType, PVOID Se
                 Perform needed actions before system goes to sleep
             */
             windows_wake_sleep->aboutToSleep();
+            break;
 
         case PBT_APMRESUMESUSPEND:
 
