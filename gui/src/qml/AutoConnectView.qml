@@ -73,7 +73,7 @@ Rectangle {
             }
             opacity: textVisible ? 1.0: 0.0
             visible: opacity
-            text: qsTr("Нажмите %1, чтобы отменить подключение").arg(Chiaki.controllers.length ? (root.controllerButton("circle").includes("deck") ? "B" : "Circle") : "escape or right-click")
+            text: qsTr("Нажмите %1, чтобы отменить подключение").arg(Chiaki.controllers.length ? (root.controllerButton("circle").includes("deck") ? "B" : "Circle") : "клавишу Esc или щёлкните правой кнопкой мыши")
         }
     }
 
