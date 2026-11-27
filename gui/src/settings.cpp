@@ -1260,7 +1260,7 @@ void Settings::SetPlaceboPlaneUpscaler(PlaceboUpscaler upscaler)
 
 static const QMap<PlaceboDownscaler, QString> placebo_downscaler_values = {
 	{ PlaceboDownscaler::None, "none" },
-	{ PlaceboDownscaler::Квадрат, "box" },
+	{ PlaceboDownscaler::Box, "box" },
 	{ PlaceboDownscaler::Hermite, "hermite" },
 	{ PlaceboDownscaler::Bilinear, "bilinear" },
 	{ PlaceboDownscaler::Bicubic, "bicubic" },
