@@ -581,7 +581,7 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_list_devices(
     *device_count = num_clients;
     for (size_t i = 0; i < num_clients; i++)
     {
-        ChiakiHolepunchDeviceInfo device;
+        ChiakiHolepunchDeviceInfo device = {0};
         device.type = console_type;
 
         json_object *client = json_object_array_get_idx(clients, i);
@@ -654,7 +654,7 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_list_devices(
             err = CHIAKI_ERR_UNKNOWN;
             goto cleanup_devices;
         }
-        strncpy(device.device_name, json_object_get_string(device_name), sizeof(device.device_name));
+        snprintf(device.device_name, sizeof(device.device_name), "%s", json_object_get_string(device_name));
         (*devices)[i] = device;
     }
 
@@ -5698,7 +5698,7 @@ static ChiakiErrorCode session_message_parse(
         }
         for (size_t i = 0; i < num_candidates; i++)
         {
-            Candidate candidate;
+            Candidate candidate = {0};
             json_object *candidate_json = json_object_array_get_idx(obj, i);
 
             json_object *jobj = NULL;
@@ -5725,7 +5725,7 @@ static ChiakiErrorCode session_message_parse(
                 goto invalid_schema;
             }
             const char *addr_str = json_object_get_string(jobj);
-            strncpy(candidate.addr, addr_str, sizeof(candidate.addr));
+            snprintf(candidate.addr, sizeof(candidate.addr), "%s", addr_str);
 
             json_object_object_get_ex(candidate_json, "mappedAddr", &jobj);
             if (jobj == NULL || !json_object_is_type(jobj, json_type_string))
@@ -5734,7 +5734,7 @@ static ChiakiErrorCode session_message_parse(
                 goto invalid_schema;
             }
             const char *mapped_addr_str = json_object_get_string(jobj);
-            strncpy(candidate.addr_mapped, mapped_addr_str, sizeof(candidate.addr_mapped));
+            snprintf(candidate.addr_mapped, sizeof(candidate.addr_mapped), "%s", mapped_addr_str);
 
             json_object_object_get_ex(candidate_json, "port", &jobj);
             if (jobj == NULL || !json_object_is_type(jobj, json_type_int))
