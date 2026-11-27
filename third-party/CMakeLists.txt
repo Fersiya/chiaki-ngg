@@ -37,6 +37,22 @@ if(NOT CHIAKI_USE_SYSTEM_JERASURE)
 	add_library(gf_complete STATIC ${GF_COMPLETE_SOURCE})
 	target_include_directories(gf_complete PUBLIC gf-complete/include)
 
+	# Compile the SSE/SSSE3/PCLMUL code paths of gf-complete on x86_64 (this is what gf-complete's
+	# own autotools build does). Without these macros only the slow scalar fallback is built,
+	# which makes FEC recovery of lost video packets several times slower.
+	# gf-complete still checks the CPU at runtime (gf_cpu.c), so unsupported CPUs use the scalar code.
+	if(CMAKE_SYSTEM_PROCESSOR MATCHES "^([xX]86_64|AMD64|amd64|x64)$")
+		target_compile_definitions(gf_complete PRIVATE
+				INTEL_SSE INTEL_SSE2 INTEL_SSE3 INTEL_SSSE3 INTEL_SSE4 INTEL_SSE4_PCLMUL)
+		if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+			# Everything except gf_cpu.c, which has to run safely before the CPU features are known
+			set(GF_COMPLETE_SIMD_SOURCE ${GF_COMPLETE_SOURCE})
+			list(REMOVE_ITEM GF_COMPLETE_SIMD_SOURCE gf-complete/src/gf_cpu.c)
+			set_source_files_properties(${GF_COMPLETE_SIMD_SOURCE} PROPERTIES
+					COMPILE_OPTIONS "-msse2;-msse3;-mssse3;-msse4.1;-msse4.2;-mpclmul")
+		endif()
+	endif()
+
 	##################
 	# jerasure
 	##################
