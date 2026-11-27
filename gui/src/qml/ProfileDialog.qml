@@ -11,11 +11,11 @@ DialogView {
 
     buttonText: {
         if(deleteBox.visible && deleteBox.checked)
-            qsTr("Delete Profile")
+            qsTr("Удалить профиль")
         else if(profileName.visible)
-            qsTr("Create Profile")
+            qsTr("Создать профиль")
         else
-            qsTr("Switch Profile")
+            qsTr("Переключить профиль")
     }
     buttonEnabled: {
         if(deleteBox.visible && deleteBox.checked)
@@ -49,7 +49,7 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("User Profile:")
+                text: qsTr("Профиль пользователя:")
             }
 
             C.ComboBox {
@@ -62,7 +62,7 @@ DialogView {
             }
 
             Label {
-                text: qsTr("New Profile Name")
+                text: qsTr("Название нового профиля")
                 visible: profileComboBox.currentIndex == profileComboBox.model.indexOf("create new profile")
             }
 
@@ -74,7 +74,7 @@ DialogView {
             }
 
             Label {
-                text: qsTr("Delete selected profile")
+                text: qsTr("Удалить выбранный профиль")
                 visible: profileComboBox.model[profileComboBox.currentIndex] != "default" && profileComboBox.model[profileComboBox.currentIndex] != "create new profile" && profileComboBox.model[profileComboBox.currentIndex] != Chiaki.settings.currentProfile
             }
 
