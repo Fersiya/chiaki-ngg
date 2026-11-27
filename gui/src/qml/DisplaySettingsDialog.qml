@@ -17,7 +17,7 @@ DialogView {
     buttonVisible: false
 
     Item {
-        // Stream Display Settings
+        // Stream Настройки изображения
         GridLayout {
             id: displayGrid
             anchors {
