@@ -1566,7 +1566,7 @@ DialogView {
                             popup.width: 700
                             popup.font.pixelSize: 16
                             firstInFocusChain: true
-                            model: [qsTr("Auto")].concat(Chiaki.settings.availableAudioOutDevices)
+                            model: [qsTr("Авто")].concat(Chiaki.settings.availableAudioOutDevices)
                             currentIndex: Math.max(0, model.indexOf(Chiaki.settings.audioOutDevice))
                             onActivated: (index) => Chiaki.settings.audioOutDevice = index ? model[index] : ""
                             KeyNavigation.down: audioInDevice
@@ -1589,7 +1589,7 @@ DialogView {
                             popup.x: (width - popup.width) / 2
                             popup.width: 700
                             popup.font.pixelSize: 16
-                            model: [qsTr("Auto")].concat(Chiaki.settings.availableAudioInDevices)
+                            model: [qsTr("Авто")].concat(Chiaki.settings.availableAudioInDevices)
                             currentIndex: Math.max(0, model.indexOf(Chiaki.settings.audioInDevice))
                             onActivated: (index) => Chiaki.settings.audioInDevice = index ? model[index] : ""
                             KeyNavigation.up: audioOutDevice
@@ -2083,7 +2083,7 @@ DialogView {
                                         rightMargin: 20
                                     }
                                     text: qsTr("Удалить")
-                                    onClicked: root.showConfirmDialog(qsTr("Delete Console"), qsTr("Are you sure you want to delete this console?"), () => Chiaki.settings.deleteRegisteredHost(index));
+                                    onClicked: root.showConfirmDialog(qsTr("Удалить консоль"), qsTr("Вы действительно хотите удалить эту консоль?"), () => Chiaki.settings.deleteRegisteredHost(index));
                                     Material.roundedScale: Material.SmallScale
                                     Material.accent: Material.Red
                                 }
