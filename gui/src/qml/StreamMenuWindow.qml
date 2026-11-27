@@ -137,7 +137,7 @@ Window {
                         horizontalCenter: parent.horizontalCenter
                         leftMargin: 10
                     }
-                    text: ((parent.value / 128.0) * 100).toFixed(0) + qsTr("% Volume")
+                    text: ((parent.value / 128.0) * 100).toFixed(0) + qsTr("% громкости")
                 }
             }
 
@@ -149,7 +149,7 @@ Window {
             ToolButton {
                 id: muteButton
                 Layout.rightMargin: 20
-                text: qsTr("Mic")
+                text: qsTr("Микрофон")
                 padding: 10
                 checkable: true
                 enabled: Chiaki.session && Chiaki.session.connected
@@ -163,13 +163,13 @@ Window {
 
             ToolButton {
                 id: zoomButton
-                text: qsTr("Zoom")
+                text: qsTr("Масштаб")
                 padding: 10
                 checkable: true
-                checked: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Zoom
-                onToggled: Chiaki.window.videoMode = Chiaki.window.videoMode == ChiakiWindow.VideoMode.Zoom ? ChiakiWindow.VideoMode.Normal : ChiakiWindow.VideoMode.Zoom
+                checked: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Масштаб
+                onToggled: Chiaki.window.videoMode = Chiaki.window.videoMode == ChiakiWindow.VideoMode.Масштаб ? ChiakiWindow.VideoMode.Normal : ChiakiWindow.VideoMode.Масштаб
                 KeyNavigation.left: muteButton
-                KeyNavigation.right: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Zoom ? zoomFactor : stretchButton
+                KeyNavigation.right: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Масштаб ? zoomFactor : stretchButton
                 Keys.onReturnPressed: toggled()
                 Keys.onEscapePressed: streamMenuWindow.closeRequested()
             }
@@ -181,11 +181,11 @@ Window {
                 to: 4
                 Layout.preferredHeight: 100
                 stepSize: 0.01
-                visible: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Zoom
-                value: Chiaki.window.ZoomFactor
+                visible: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Масштаб
+                value: Chiaki.window.МасштабFactor
                 onMoved: {
-                    Chiaki.window.ZoomFactor = value
-                    Chiaki.settings.sZoomFactor = value
+                    Chiaki.window.МасштабFactor = value
+                    Chiaki.settings.sМасштабFactor = value
                 }
 
                 Label {
@@ -196,7 +196,7 @@ Window {
                     }
                     text: {
                         if (parent.value === -1)
-                            return qsTr("No Black Bars");
+                            return qsTr("Без чёрных полос");
                         if (parent.value >= 0)
                             return qsTr((parent.value + 1).toFixed(2)) + qsTr(" x");
                         return qsTr(parent.value.toFixed(2)) + qsTr(" x");
@@ -217,7 +217,7 @@ Window {
                 checkable: true
                 checked: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Stretch
                 onToggled: Chiaki.window.videoMode = Chiaki.window.videoMode == ChiakiWindow.VideoMode.Stretch ? ChiakiWindow.VideoMode.Normal : ChiakiWindow.VideoMode.Stretch
-                KeyNavigation.left: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Zoom ? zoomFactor : zoomButton
+                KeyNavigation.left: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Масштаб ? zoomFactor : zoomButton
                 KeyNavigation.right: defaultButton
                 Keys.onReturnPressed: toggled()
                 Keys.onEscapePressed: streamMenuWindow.closeRequested()
@@ -262,7 +262,7 @@ Window {
 
             ToolButton {
                 id: highQualitySpatialButton
-                text: qsTr("HQ + Spatial")
+                text: qsTr("Высокое качество + пространственное масштабирование")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.HighQualitySpatial
@@ -278,7 +278,7 @@ Window {
 
             ToolButton {
                 id: highQualityAdvancedSpatialButton
-                text: qsTr("HQ + Adv Spatial")
+                text: qsTr("Высокое качество + улучшенное пространственное масштабирование")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.HighQualityAdvancedSpatial
@@ -316,7 +316,7 @@ Window {
 
             ToolButton {
                 id: displaySettingsButton
-                text: qsTr("Display")
+                text: qsTr("Экран")
                 padding: 10
                 checkable: false
                 icon.source: "qrc:/icons/settings-20px.svg"
@@ -375,8 +375,8 @@ Window {
                 if (!Chiaki.session)
                     return "";
                 if (Chiaki.session.connected)
-                    return qsTr("Connected to <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
-                return qsTr("Connecting to <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
+                    return qsTr("Подключено к <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
+                return qsTr("Подключение к <b>%1</b>").arg(Chiaki.settings.streamerMode ? "hidden" : Chiaki.session.host);
             }
 
             RowLayout {
@@ -387,7 +387,7 @@ Window {
                 }
 
                 Label {
-                    text: qsTr("packet loss")
+                    text: qsTr("Потеря пакетов")
                     font.pixelSize: 15
                     opacity: parent.visible && Chiaki.session ? 1.0 : 0.0
                     visible: opacity
@@ -409,7 +409,7 @@ Window {
 
                 Label {
                     Layout.leftMargin: droppedFramesLabel.width + 6
-                    text: qsTr("dropped frames")
+                    text: qsTr("Пропущенные кадры")
                     font.pixelSize: 15
                     opacity: parent.visible && Chiaki.window.droppedFrames ? 1.0 : 0.0
                     visible: opacity
