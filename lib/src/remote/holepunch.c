@@ -6081,8 +6081,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         }
         goto cleanup;
     }
-    // hostname has max of 253 chars + 1 char for colon : + port has max of 4 chars + 1 char for null termination
-    char server_strings[10][259];
+    // Hostnames are at most 253 bytes; allow ':', a 5-digit port, optional CR, and NUL.
+    char server_strings[10][261];
     char *ptr = strtok(response_data.data, "\n");
     while(ptr != NULL && session->num_stun_servers <= 9)
     {
@@ -6189,8 +6189,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         }
         goto cleanup;
     }
-    // ipv6 string has max of 45 chars: 39 chars + 2 chars for [] + 1 char for colon : + port has max of 4 chars + 1 char for null termination
-    char server_strings_ipv6[10][47];
+    // After dropping '[', allow a 39-byte IPv6 address, ']', ':', a 5-digit port, optional CR, and NUL.
+    char server_strings_ipv6[10][48];
     ptr = strtok(response_data.data, "\n");
     while(ptr != NULL && session->num_stun_servers_ipv6 <= 9)
     {
