@@ -212,7 +212,7 @@ Window {
             ToolButton {
                 id: stretchButton
                 Layout.rightMargin: 50
-                text: qsTr("Stretch")
+                text: qsTr("Растянуть")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Stretch
@@ -225,7 +225,7 @@ Window {
 
             ToolButton {
                 id: defaultButton
-                text: qsTr("Default")
+                text: qsTr("По умолчанию")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.Default
@@ -246,7 +246,7 @@ Window {
 
             ToolButton {
                 id: highQualityButton
-                text: qsTr("High Quality")
+                text: qsTr("Высокое качество")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.HighQuality
@@ -299,7 +299,7 @@ Window {
 
             ToolButton {
                 id: customButton
-                text: qsTr("Custom")
+                text: qsTr("Пользовательский")
                 Layout.rightMargin: 40
                 padding: 10
                 checkable: true
