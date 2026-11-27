@@ -458,24 +458,28 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_recv(RudpInstance *rudp, RudpMess
     bool success = false;
     for(int i = 0; i < tries; i++)
     {
+        ChiakiErrorCode send_err;
         switch(send_type)
         {
             case INIT_REQUEST:
-                chiaki_rudp_send_init_message(rudp);
+                send_err = chiaki_rudp_send_init_message(rudp);
                 break;
             case COOKIE_REQUEST:
-                chiaki_rudp_send_cookie_message(rudp, buf, buf_size);
+                send_err = chiaki_rudp_send_cookie_message(rudp, buf, buf_size);
                 break;
             case ACK:
-                chiaki_rudp_send_ack_message(rudp, remote_counter);
+                send_err = chiaki_rudp_send_ack_message(rudp, remote_counter);
                 break;
             case SESSION_MESSAGE:
-                chiaki_rudp_send_session_message(rudp, remote_counter, buf, buf_size);
+                send_err = chiaki_rudp_send_session_message(rudp, remote_counter, buf, buf_size);
                 break;
             default:
                 CHIAKI_LOGE(rudp->log, "Selected RudpPacketType 0x%04x to send that is not supported by rudp send receive.", send_type);
                 return CHIAKI_ERR_INVALID_DATA;
         }
+        if(send_err != CHIAKI_ERR_SUCCESS)
+            return send_err;
+
         ChiakiErrorCode err = chiaki_rudp_select_recv(rudp, 1500, message);
         if(err == CHIAKI_ERR_TIMEOUT)
             continue;
