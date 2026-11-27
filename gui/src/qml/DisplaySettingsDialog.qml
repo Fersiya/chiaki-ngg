@@ -12,8 +12,8 @@ import "controls" as C
 DialogView {
     id: dialog
     property alias gridHeight: displayGrid.height
-    title: qsTr("Display Settings")
-    header: qsTr("* Defaults in () to right of value or marked with (Default)")
+    title: qsTr("Настройки изображения")
+    header: qsTr("* Значения по умолчанию указаны в скобках или помечены как (По умолчанию)")
     buttonVisible: false
 
     Item {
@@ -31,48 +31,48 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Target Primaries:")
+                text: qsTr("Целевые основные цвета:")
             }
 
             C.ComboBox {
                 firstInFocusChain: true
                 Layout.preferredWidth: 600
-                model: [qsTr("Auto"), qsTr("ITU-R Rec. BT.601 NTSC (Standard Gamut)"), qsTr("ITU-R Rec. BT.601 PAL (Standard Gamut)"), qsTr("ITU-R Rec. BT.709 (Standard Gamut)"), qsTr("ITU-R Rec. BT.470 M (Standard Gamut)"), qsTr("EBU Tech. 3213-E (Standard Gamut)"), qsTr("ITU-R Rec. BT.2020 (Wide Gamut)"), qsTr("Apple RGB (Wide Gamut)"), qsTr("Adobe RGB (Wide Gamut)"), qsTr("ProPhoto RGB (Wide Gamut)"), qsTr("CIE 1931 RGB primaries (Wide Gamut)"), qsTr("DCI-P3 (Wide Gamut)"), qsTr("DCI-P3 with D65 white point (Wide Gamut)"), qsTr("Panasonic V-Gamut (Wide Gamut)"), qsTr("Sony S-Gamut (Wide Gamut)"), qsTr("Traditional film primaries with Illuminant C (Wide Gamut)"), qsTr("ACES Primaries #0 (Wide Gamut)"), qsTr("ACES Primaries #1 (Wide Gamut)")]
+                model: [qsTr("Авто"), qsTr("ITU-R Rec. BT.601 NTSC (Standard Gamut)"), qsTr("ITU-R Rec. BT.601 PAL (Standard Gamut)"), qsTr("ITU-R Rec. BT.709 (Standard Gamut)"), qsTr("ITU-R Rec. BT.470 M (Standard Gamut)"), qsTr("EBU Tech. 3213-E (Standard Gamut)"), qsTr("ITU-R Rec. BT.2020 (Wide Gamut)"), qsTr("Apple RGB (Wide Gamut)"), qsTr("Adobe RGB (Wide Gamut)"), qsTr("ProPhoto RGB (Wide Gamut)"), qsTr("CIE 1931 RGB primaries (Wide Gamut)"), qsTr("DCI-P3 (Wide Gamut)"), qsTr("DCI-P3 with D65 white point (Wide Gamut)"), qsTr("Panasonic V-Gamut (Wide Gamut)"), qsTr("Sony S-Gamut (Wide Gamut)"), qsTr("Traditional film primaries with Illuminant C (Wide Gamut)"), qsTr("ACES Primaries #0 (Wide Gamut)"), qsTr("ACES Primaries #1 (Wide Gamut)")]
                 currentIndex: Chiaki.settings.displayTargetPrim
                 onActivated: index => Chiaki.settings.displayTargetPrim = index
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("(Auto)")
+                text: qsTr("(Авто)")
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Target Transfer Characteristics:")
+                text: qsTr("Целевая передаточная характеристика:")
             }
 
             C.ComboBox {
                 Layout.preferredWidth: 600
-                model: [qsTr("Auto"), qsTr("ITU-R Rec. BT.1886 (SDR)"), qsTr("IEC 61966-2-4 sRGB (SDR)"), qsTr("Linear light content (SDR)"), qsTr("IPure power gamma 1.8 (SDR)"), qsTr("Pure power gamma 2.0 (SDR)"), qsTr("Pure power gamma 2.2 (SDR)"), qsTr("Pure power gamma 2.4 (SDR)"), qsTr("Pure power gamma 2.6 (SDR)"), qsTr("Pure power gamma 2.8 (SDR)"), qsTr("ProPhoto RGB (SDR)"), qsTr("Digital Cinema Distribution Master (SDR)"), qsTr("ITU-R BT.2100 PQ / SMPTE ST2048 (HDR)"), qsTr("ITU-R BT.2100 HLG / ARIB STD-B67 (HDR)"), qsTr("Panasonic V-Log (HDR)"), qsTr("Sony S-Log1 (HDR)"), qsTr("Sony S-Log2 (HDR)")]
+                model: [qsTr("Авто"), qsTr("ITU-R Rec. BT.1886 (SDR)"), qsTr("IEC 61966-2-4 sRGB (SDR)"), qsTr("Linear light content (SDR)"), qsTr("IPure power gamma 1.8 (SDR)"), qsTr("Pure power gamma 2.0 (SDR)"), qsTr("Pure power gamma 2.2 (SDR)"), qsTr("Pure power gamma 2.4 (SDR)"), qsTr("Pure power gamma 2.6 (SDR)"), qsTr("Pure power gamma 2.8 (SDR)"), qsTr("ProPhoto RGB (SDR)"), qsTr("Digital Cinema Distribution Master (SDR)"), qsTr("ITU-R BT.2100 PQ / SMPTE ST2048 (HDR)"), qsTr("ITU-R BT.2100 HLG / ARIB STD-B67 (HDR)"), qsTr("Panasonic V-Log (HDR)"), qsTr("Sony S-Log1 (HDR)"), qsTr("Sony S-Log2 (HDR)")]
                 currentIndex: Chiaki.settings.displayTargetTrc
                 onActivated: index => Chiaki.settings.displayTargetTrc = index
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("(Auto)")
+                text: qsTr("(Авто)")
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Target Peak:")
+                text: qsTr("Целевая яркость:")
             }
 
             C.ComboBox {
                 id: targetPeakChoice
                 Layout.preferredWidth: 400
-                model: [qsTr("Auto"), qsTr("Numeric Value")]
+                model: [qsTr("Авто"), qsTr("Числовое значение")]
                 currentIndex: {
                     if(Chiaki.settings.displayTargetPeak == 0)
                         0;
@@ -89,12 +89,12 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("(Auto)")
+                text: qsTr("(Авто)")
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Target Peak Value:")
+                text: qsTr("Целевое значение яркости:")
                 visible: targetPeakChoice.currentIndex == 1
             }
             
@@ -113,27 +113,27 @@ DialogView {
                         verticalCenter: parent.verticalCenter
                         leftMargin: 10
                     }
-                    text: parent.value + qsTr(" nits")
+                    text: parent.value + qsTr(" нит")
                 }
                 visible: targetPeakChoice.currentIndex == 1
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("(1000 nits)")
+                text: qsTr("(1000 нит)")
                 visible: targetPeakChoice.currentIndex == 1
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Target Contrast:")
+                text: qsTr("Целевая контрастность:")
             }
 
             C.ComboBox {
                 id: targetContrastChoice
                 Layout.preferredWidth: 400
                 lastInFocusChain: currentIndex != 2
-                model: [qsTr("Auto"), qsTr("Infinity"), qsTr("Numeric Value")]
+                model: [qsTr("Авто"), qsTr("Бесконечность"), qsTr("Числовое значение")]
                 currentIndex: {
                     if(Chiaki.settings.displayTargetContrast == -1)
                         1;
@@ -154,12 +154,12 @@ DialogView {
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("(Auto)")
+                text: qsTr("(Авто)")
             }
 
             Label {
                 Layout.alignment: Qt.AlignRight
-                text: qsTr("Target Contrast Value:")
+                text: qsTr("Целевое значение контрастности:")
                 visible: targetContrastChoice.currentIndex == 2
             }
             
