@@ -208,7 +208,8 @@ void ControllerManager::UpdateAvailableControllers()
 			continue;
 
 		// We'll try to identify pads with Motion Control
-		SDL_JoystickGUID guid = SDL_JoystickGetGUID(SDL_JoystickOpen(i));
+		// Get the device GUID without opening a joystick handle.
+		SDL_JoystickGUID guid = SDL_JoystickGetDeviceGUID(i);
 		char guid_str[256];
 		SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
 
@@ -382,6 +383,8 @@ Controller::Controller(int device_id, ControllerManager *manager)
 		if(SDL_JoystickGetDeviceInstanceID(i) == device_id)
 		{
 			controller = SDL_GameControllerOpen(i);
+			if(!controller)
+				break;
 #if SDL_VERSION_ATLEAST(2, 0, 14)
 			if(SDL_GameControllerHasSensor(controller, SDL_SENSOR_ACCEL))
 				SDL_GameControllerSetSensorEnabled(controller, SDL_SENSOR_ACCEL, SDL_TRUE);
