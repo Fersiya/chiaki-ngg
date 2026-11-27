@@ -17,8 +17,8 @@ DialogView {
     property int selectedConsole: SettingsDialog.Console.PS5
     property bool quitControllerMapping: true
     id: dialog
-    title: qsTr("Settings")
-    header: qsTr("* Defaults in () to right of value or marked with (Default)")
+    title: qsTr("Настройки")
+    header: qsTr("* Значения по умолчанию указаны в скобках или помечены как (По умолчанию)")
     buttonVisible: false
     function flickContainsItem(flick, item) {
         let current = item;
@@ -175,7 +175,7 @@ DialogView {
             }
             TabButton {
                 id: general
-                text: qsTr("General")
+                text: qsTr("Общие")
                 focusPolicy: Qt.NoFocus
                 Image {
                     anchors {
@@ -193,7 +193,7 @@ DialogView {
 
             TabButton {
                 id: video
-                text: qsTr("Video")
+                text: qsTr("Видео")
                 focusPolicy: Qt.NoFocus
                 Image {
                     anchors {
@@ -223,7 +223,7 @@ DialogView {
 
             TabButton {
                 id: stream
-                text: qsTr("Stream")
+                text: qsTr("Трансляция")
                 focusPolicy: Qt.NoFocus
                 Image {
                     anchors {
@@ -252,7 +252,7 @@ DialogView {
             }
 
             TabButton {
-                text: qsTr("Audio/Wifi")
+                text: qsTr("Звук / Wi-Fi")
                 id: audio
                 focusPolicy: Qt.NoFocus
                 Image {
@@ -282,7 +282,7 @@ DialogView {
             }
 
             TabButton {
-                text: qsTr("Consoles")
+                text: qsTr("Консоли")
                 id: consoles
                 focusPolicy: Qt.NoFocus
                 Image {
@@ -312,7 +312,7 @@ DialogView {
             }
 
             TabButton {
-                text: qsTr("Keys")
+                text: qsTr("Клавиши")
                 id: keys
                 focusPolicy: Qt.NoFocus
                 Image {
@@ -342,7 +342,7 @@ DialogView {
             }
 
             TabButton {
-                text: qsTr("Controllers")
+                text: qsTr("Контроллеры")
                 id: controllers
                 focusPolicy: Qt.NoFocus
                 Image {
@@ -372,7 +372,7 @@ DialogView {
             }
 
             TabButton {
-                text: qsTr("Remote")
+                text: qsTr("Удалённо")
                 id: remote
                 focusPolicy: Qt.NoFocus
                 Image {
@@ -402,7 +402,7 @@ DialogView {
             }
 
             TabButton {
-                text: qsTr("Config")
+                text: qsTr("Конфигурация")
                 id: config
                 focusPolicy: Qt.NoFocus
                 Image {
@@ -465,48 +465,48 @@ DialogView {
 
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Action On Disconnect:")
+                                text: qsTr("Действие при отключении:")
                             }
 
                         C.ComboBox {
                             id: disconnectAction
                             Layout.preferredWidth: 400
                             firstInFocusChain: true
-                            model: [qsTr("Do Nothing"), qsTr("Enter Sleep Mode"), qsTr("Ask")]
+                            model: [qsTr("Ничего не делать"), qsTr("Перевести в режим покоя"), qsTr("Спрашивать")]
                             currentIndex: Chiaki.settings.disconnectAction
                             onActivated: index => Chiaki.settings.disconnectAction = index
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Ask)")
+                            text: qsTr("(Спрашивать)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Action On Suspend:")
+                            text: qsTr("Действие при переходе в сон:")
                         }
 
                         C.ComboBox {
                             Layout.preferredWidth: 400
-                            model: [qsTr("Do Nothing"), qsTr("Enter Sleep Mode")]
+                            model: [qsTr("Ничего не делать"), qsTr("Перевести в режим покоя")]
                             currentIndex: Chiaki.settings.suspendAction
                             onActivated: index => Chiaki.settings.suspendAction = index
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Do Nothing)")
+                            text: qsTr("(Ничего не делать)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Steam Deck Haptics:")
+                            text: qsTr("Тактильная отдача Steam Deck:")
                             visible: (typeof Chiaki.settings.steamDeckHaptics !== "undefined")
                         }
 
                         C.CheckBox {
-                            text: qsTr("True haptics for SteamDeck, better quality but noisier")
+                            text: qsTr("Нативная тактильная отдача Steam Deck: выше качество, но больше шум")
                             checked: {
                                 if(typeof Chiaki.settings.steamDeckHaptics !== "undefined")
                                     Chiaki.settings.steamDeckHaptics
@@ -519,18 +519,18 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                             visible: (typeof Chiaki.settings.steamDeckHaptics !== "undefined")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Steam Deck Vertical:")
+                            text: qsTr("Вертикальная ориентация Steam Deck:")
                             visible: typeof Chiaki.settings.verticalDeck !== "undefined"
                         }
 
                         C.CheckBox {
-                            text: qsTr("Use Steam Deck in vertical orientation (motion controls)")
+                            text: qsTr("Использовать Steam Deck вертикально (управление движением)")
                             checked: {
                                 if(typeof Chiaki.settings.verticalDeck !== "undefined")
                                     Chiaki.settings.verticalDeck
@@ -543,30 +543,30 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                             visible: typeof Chiaki.settings.verticalDeck !== "undefined"
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Audio/Video:")
+                            text: qsTr("Звук / видео:")
                         }
 
                         C.ComboBox {
                             Layout.preferredWidth: 400
-                            model: [qsTr("Audio and Video Enabled"), qsTr("Audio Disabled"), qsTr("Video Disabled"), qsTr("Audio and Video Disabled")]
+                            model: [qsTr("Звук и видео включены"), qsTr("Звук выключен"), qsTr("Видео выключено"), qsTr("Звук и видео выключены")]
                             currentIndex: Chiaki.settings.audioVideoDisabled
                             onActivated: index => Chiaki.settings.audioVideoDisabled = index
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Audio and Video Enabled)")
+                            text: qsTr("(Звук и видео включены)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Log Directory:")
+                            text: qsTr("Папка журналов:")
                         }
 
                         Label {
@@ -583,7 +583,7 @@ DialogView {
                                     verticalCenter: parent.verticalCenter
                                     leftMargin: parent.paintedWidth + 20
                                 }
-                                text: qsTr("Open")
+                                text: qsTr("Открыть")
                                 onClicked: Qt.openUrlExternally("file://" + parent.text);
                                 Material.roundedScale: Material.SmallScale
                             }
@@ -593,7 +593,7 @@ DialogView {
                         }
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Streamer Mode (Hides Info)")
+                            text: qsTr("Режим стримера (скрывает личные данные)")
                         }
                         C.CheckBox {
                             id: streamerMode
@@ -603,12 +603,12 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Stream Menu Shortcut Enabled")
+                            text: qsTr("Включить сочетание клавиш меню трансляции")
                         }
                         C.CheckBox {
                             id: streamMenu
@@ -628,7 +628,7 @@ DialogView {
 
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("(Checked)")
+                                text: qsTr("(Включено)")
                             }
                         }
                         RowLayout {
@@ -637,14 +637,14 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Stream Menu Combo:")
+                                text: qsTr("Сочетание для меню трансляции:")
                             }
 
                         C.ComboBox {
                             id: streamMenuShortcut1
                             implicitContentWidthPolicy: ComboBox.WidestText
                             firstInFocusChain: false
-                            model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                            model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                             currentIndex: Chiaki.settings.streamMenuShortcut1
                             onActivated: index => Chiaki.settings.streamMenuShortcut1 = index
                             KeyNavigation.priority: {
@@ -663,7 +663,7 @@ DialogView {
                             id: streamMenuShortcut2
                             implicitContentWidthPolicy: ComboBox.WidestText
                             firstInFocusChain: false
-                            model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                            model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                             currentIndex: Chiaki.settings.streamMenuShortcut2
                             onActivated: index => Chiaki.settings.streamMenuShortcut2 = index
                             KeyNavigation.priority: {
@@ -682,7 +682,7 @@ DialogView {
                             id: streamMenuShortcut3
                             implicitContentWidthPolicy: ComboBox.WidestText
                             firstInFocusChain: false
-                            model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                            model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                             currentIndex: Chiaki.settings.streamMenuShortcut3
                             onActivated: index => Chiaki.settings.streamMenuShortcut3 = index
                             KeyNavigation.priority: {
@@ -701,7 +701,7 @@ DialogView {
                             id: streamMenuShortcut4
                             implicitContentWidthPolicy: ComboBox.WidestText
                             firstInFocusChain: false
-                            model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                            model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                             currentIndex: Chiaki.settings.streamMenuShortcut4
                             onActivated: index => Chiaki.settings.streamMenuShortcut4 = index
                             KeyNavigation.priority: {
@@ -754,7 +754,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Hardware Decoder:")
+                            text: qsTr("Аппаратный декодер:")
                         }
 
                     RowLayout {
@@ -774,7 +774,7 @@ DialogView {
                         }
 
                         Label {
-                            text: qsTr("Zero-Copy")
+                            text: qsTr("Без копирования")
                         }
 
                         C.CheckBox {
@@ -790,31 +790,31 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(Auto)")
+                        text: qsTr("(Авто)")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Window Type:")
+                        text: qsTr("Режим окна:")
                     }
 
                     C.ComboBox {
                         id: windowTypeCombo
                         Layout.preferredWidth: 400
                         popup.width: 500
-                        model: [qsTr("Stream Resolution"), qsTr("Custom Resolution"), qsTr("Adjust Resolution Manually"), qsTr("Fullscreen"), qsTr("Zoom [adjust zoom using slider in stream menu]"), qsTr("Stretch")]
+                        model: [qsTr("Разрешение трансляции"), qsTr("Пользовательское разрешение"), qsTr("Настроить разрешение вручную"), qsTr("Полноэкранный режим"), qsTr("Масштабирование [настройте масштаб ползунком в меню трансляции]"), qsTr("Растянуть")]
                         currentIndex: Chiaki.settings.windowType
                         onActivated: (index) => Chiaki.settings.windowType = index;
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(Fullscreen)")
+                        text: qsTr("(Полноэкранный режим)")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Custom Resolution Width")
+                        text: qsTr("Ширина пользовательского разрешения")
                         visible: Chiaki.settings.windowType == 1
                     }
 
@@ -846,7 +846,7 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Custom Resolution Height")
+                        text: qsTr("Высота пользовательского разрешения")
                         visible: Chiaki.settings.windowType == 1
                     }
 
@@ -878,7 +878,7 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Toggle Fullscreen on Double-click:")
+                        text: qsTr("Переключать полноэкранный режим двойным щелчком:")
                     }
 
                     C.CheckBox {
@@ -888,12 +888,12 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(Unchecked)")
+                        text: qsTr("(Выключено)")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Hide Cursor during Stream")
+                        text: qsTr("Скрывать курсор во время трансляции")
                     }
                     C.CheckBox {
                         checked: Chiaki.settings.hideCursor
@@ -902,12 +902,12 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(Checked)")
+                        text: qsTr("(Включено)")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Vertical Sync:")
+                        text: qsTr("Вертикальная синхронизация:")
                     }
 
                     C.CheckBox {
@@ -921,17 +921,17 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(Unchecked)")
+                        text: qsTr("(Выключено)")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Render Preset:")
+                        text: qsTr("Профиль рендеринга:")
                     }
 
                     C.ComboBox {
                         Layout.preferredWidth: 520
-                        model: [qsTr("Fast"), qsTr("Default"), qsTr("High Quality"), qsTr("High Quality + Spatial Upscaling"), qsTr("High Quality + Advanced Spatial Upscaling"), qsTr("Custom")]
+                        model: [qsTr("Быстро"), qsTr("По умолчанию"), qsTr("Высокое качество"), qsTr("Высокое качество + пространственное масштабирование"), qsTr("Высокое качество + улучшенное пространственное масштабирование"), qsTr("Пользовательский")]
                         currentIndex: Chiaki.settings.videoPreset
                         onActivated: (index) => {
                             Chiaki.settings.videoPreset = index;
@@ -948,17 +948,17 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(High Quality)")
+                        text: qsTr("(Высокое качество)")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Frame Delivery:")
+                        text: qsTr("Передача кадров:")
                     }
 
                     C.ComboBox {
                         Layout.preferredWidth: 400
-                        model: [qsTr("Direct Mapping"), qsTr("Frame Queue")]
+                        model: [qsTr("Прямое отображение"), qsTr("Очередь кадров")]
                         currentIndex: Chiaki.settings.directFrameMapping ? 0 : 1
                         onActivated: (index) => {
                             const direct = index === 0;
@@ -972,17 +972,17 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(Direct Mapping)")
+                        text: qsTr("(Прямое отображение)")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Frame Mixer:")
+                        text: qsTr("Смешивание кадров:")
                     }
 
                     C.ComboBox {
                         Layout.preferredWidth: 400
-                        model: [qsTr("None"), qsTr("Oversample"), qsTr("Hermite"), qsTr("Linear"), qsTr("Cubic")]
+                        model: [qsTr("Нет"), qsTr("Сверхдискретизация"), qsTr("Эрмитова интерполяция"), qsTr("Линейный"), qsTr("Кубический")]
                         enabled: !Chiaki.settings.directFrameMapping
                         currentIndex: Chiaki.settings.directFrameMapping ? 0 : Chiaki.settings.placeboFrameMixer
                         onActivated: index => Chiaki.settings.placeboFrameMixer = index
@@ -995,7 +995,7 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Renderer Backend:")
+                        text: qsTr("Графический API:")
                     }
 
                     C.ComboBox {
@@ -1018,7 +1018,7 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Vulkan Deferred Swap:")
+                        text: qsTr("Отложенная смена буферов Vulkan:")
                         visible: Chiaki.settings.rendererBackend == 0
                     }
 
@@ -1030,19 +1030,19 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("(Unchecked)")
+                        text: qsTr("(Выключено)")
                         visible: Chiaki.settings.rendererBackend == 0
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Custom Renderer Settings")
+                        text: qsTr("Пользовательские настройки рендеринга")
                         visible: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.Custom
                     }
 
                     C.Button {
                         id: customRendererSettings
-                        text: qsTr("Open")
+                        text: qsTr("Открыть")
                         onClicked: root.showPlaceboSettingsDialog()
                         Material.roundedScale: Material.SmallScale
                         visible: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.Custom
@@ -1052,12 +1052,12 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Display Settings")
+                        text: qsTr("Настройки изображения")
                     }
 
                     C.Button {
                         id: displaySettings
-                        text: qsTr("Open")
+                        text: qsTr("Открыть")
                         onClicked: root.showDisplaySettingsDialog()
                         Material.roundedScale: Material.SmallScale
                         lastInFocusChain: true
@@ -1097,7 +1097,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Settings for:")
+                            text: qsTr("Настройки для:")
                         }
 
 
@@ -1152,23 +1152,23 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignCenter
-                        text: qsTr("Local")
+                        text: qsTr("Локально")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignCenter
-                        text: qsTr("Remote")
+                        text: qsTr("Удалённо")
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Resolution:")
+                        text: qsTr("Разрешение:")
                     }
 
                     C.ComboBox {
                         id: resolutionLocalPS4
                         Layout.preferredWidth: 400
-                        model: [qsTr("360p"), qsTr("540p"), qsTr("720p (Default)"), qsTr("1080p (PS5 and PS4 Pro)")]
+                        model: [qsTr("360p"), qsTr("540p"), qsTr("720p (по умолчанию)"), qsTr("1080p (PS5 и PS4 Pro)")]
                         currentIndex: Chiaki.settings.resolutionLocalPS4 - 1
                         onActivated: (index) => {
                             Chiaki.settings.resolutionLocalPS4 = index + 1
@@ -1189,7 +1189,7 @@ DialogView {
                     C.ComboBox {
                         id: resolutionRemotePS4
                         Layout.preferredWidth: 400
-                        model: [qsTr("360p"), qsTr("540p"), qsTr("720p (Default)"), qsTr("1080p (PS5 and PS4 Pro)")]
+                        model: [qsTr("360p"), qsTr("540p"), qsTr("720p (по умолчанию)"), qsTr("1080p (PS5 и PS4 Pro)")]
                         currentIndex: Chiaki.settings.resolutionRemotePS4 - 1
                         onActivated: (index) => {
                             Chiaki.settings.resolutionRemotePS4 = index + 1
@@ -1231,7 +1231,7 @@ DialogView {
                     C.ComboBox {
                         id: resolutionRemotePS5
                         Layout.preferredWidth: 400
-                        model: [qsTr("360p"), qsTr("540p"), qsTr("720p (Default)"), qsTr("1080p")]
+                        model: [qsTr("360p"), qsTr("540p"), qsTr("720p (по умолчанию)"), qsTr("1080p")]
                         currentIndex: Chiaki.settings.resolutionRemotePS5 - 1
                         onActivated: (index) => {
                             Chiaki.settings.resolutionRemotePS5 = index + 1
@@ -1251,13 +1251,13 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("FPS:")
+                        text: qsTr("Частота кадров:")
                     }
 
                     C.ComboBox {
                         id: fpsLocalPS4
                         Layout.preferredWidth: 400
-                        model: [qsTr("30 fps"), qsTr("60 fps (Default)")]
+                        model: [qsTr("30 fps"), qsTr("60 кадров/с (по умолчанию)")]
                         currentIndex: (Chiaki.settings.fpsLocalPS4 / 30) - 1
                         onActivated: (index) => Chiaki.settings.fpsLocalPS4 = (index + 1) * 30
                         visible: selectedConsole == SettingsDialog.Console.PS4
@@ -1275,7 +1275,7 @@ DialogView {
                     C.ComboBox {
                         id: fpsRemotePS4
                         Layout.preferredWidth: 400
-                        model: [qsTr("30 fps"), qsTr("60 fps (Default)")]
+                        model: [qsTr("30 fps"), qsTr("60 кадров/с (по умолчанию)")]
                         currentIndex: (Chiaki.settings.fpsRemotePS4 / 30) - 1
                         onActivated: (index) => Chiaki.settings.fpsRemotePS4 = (index + 1) * 30
                         visible: selectedConsole == SettingsDialog.Console.PS4
@@ -1293,7 +1293,7 @@ DialogView {
                     C.ComboBox {
                         id: fpsLocalPS5
                         Layout.preferredWidth: 400
-                        model: [qsTr("30 fps"), qsTr("60 fps (Default)")]
+                        model: [qsTr("30 fps"), qsTr("60 кадров/с (по умолчанию)")]
                         currentIndex: (Chiaki.settings.fpsLocalPS5 / 30) - 1
                         onActivated: (index) => Chiaki.settings.fpsLocalPS5 = (index + 1) * 30
                         visible: selectedConsole == SettingsDialog.Console.PS5
@@ -1311,7 +1311,7 @@ DialogView {
                     C.ComboBox {
                         id: fpsRemotePS5
                         Layout.preferredWidth: 400
-                        model: [qsTr("30 fps"), qsTr("60 fps (Default)")]
+                        model: [qsTr("30 fps"), qsTr("60 кадров/с (по умолчанию)")]
                         currentIndex: (Chiaki.settings.fpsRemotePS5 / 30) - 1
                         onActivated: (index) => Chiaki.settings.fpsRemotePS5 = (index + 1) * 30
                         visible: selectedConsole == SettingsDialog.Console.PS5
@@ -1328,7 +1328,7 @@ DialogView {
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Bitrate:")
+                        text: qsTr("Битрейт:")
                     }
 
                     C.Slider {
@@ -1359,7 +1359,7 @@ DialogView {
                                 verticalCenter: parent.verticalCenter
                                 leftMargin: 10
                             }
-                            text: (parent.value) + qsTr(" Mbps") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
+                            text: (parent.value) + qsTr(" Мбит/с") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
                         }
                     }
 
@@ -1393,7 +1393,7 @@ DialogView {
                                 verticalCenter: parent.verticalCenter
                                 leftMargin: 10
                             }
-                            text: (parent.value) + qsTr(" Mbps") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
+                            text: (parent.value) + qsTr(" Мбит/с") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
                         }
                     }
 
@@ -1426,7 +1426,7 @@ DialogView {
                                 verticalCenter: parent.verticalCenter
                                 leftMargin: 10
                             }
-                            text: (parent.value) + qsTr(" Mbps") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
+                            text: (parent.value) + qsTr(" Мбит/с") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
                         }
                     }
 
@@ -1460,13 +1460,13 @@ DialogView {
                                 verticalCenter: parent.verticalCenter
                                 leftMargin: 10
                             }
-                            text: (parent.value) + qsTr(" Mbps") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
+                            text: (parent.value) + qsTr(" Мбит/с") + qsTr(" (%1 Mbps)").arg(parent.bitrate.toFixed(0))
                         }
                     }
 
                     Label {
                         Layout.alignment: Qt.AlignRight
-                        text: qsTr("Codec:")
+                        text: qsTr("Кодек:")
                         visible: selectedConsole == SettingsDialog.Console.PS5
                     }
 
@@ -1474,7 +1474,7 @@ DialogView {
                         id: codecLocalPS5
                         Layout.preferredWidth: 400
                         property bool openGlBackend: Chiaki.settings.rendererBackend === 1
-						model: openGlBackend ? [qsTr("H264"), qsTr("H265 (Default)")] : [qsTr("H264"), qsTr("H265 (Default)"), qsTr("H265 HDR")]
+						model: openGlBackend ? [qsTr("H264"), qsTr("H.265 (по умолчанию)")] : [qsTr("H264"), qsTr("H.265 (по умолчанию)"), qsTr("H.265 HDR")]
                         currentIndex: Chiaki.settings.codecLocalPS5
                         onActivated: (index) => Chiaki.settings.codecLocalPS5 = index
                         visible: selectedConsole == SettingsDialog.Console.PS5
@@ -1500,7 +1500,7 @@ DialogView {
                             id: codecRemotePS5
                             Layout.preferredWidth: 400
                         property bool openGlBackend: Chiaki.settings.rendererBackend === 1
-                        model: openGlBackend ? [qsTr("H264"), qsTr("H265 (Default)")] : [qsTr("H264"), qsTr("H265 (Default)"), qsTr("H265 HDR")]
+                        model: openGlBackend ? [qsTr("H264"), qsTr("H.265 (по умолчанию)")] : [qsTr("H264"), qsTr("H.265 (по умолчанию)"), qsTr("H.265 HDR")]
                             currentIndex: Chiaki.settings.codecRemotePS5
                             onActivated: (index) => Chiaki.settings.codecRemotePS5 = index
                             visible: selectedConsole == SettingsDialog.Console.PS5
@@ -1556,7 +1556,7 @@ DialogView {
                         }
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Output Device:")
+                            text: qsTr("Устройство вывода:")
                         }
 
                         C.ComboBox {
@@ -1575,12 +1575,12 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Auto)")
+                            text: qsTr("(Авто)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Input Device:")
+                            text: qsTr("Устройство ввода:")
                         }
 
                         C.ComboBox {
@@ -1599,12 +1599,12 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Auto)")
+                            text: qsTr("(Авто)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Audio Buffer Size:")
+                            text: qsTr("Размер аудиобуфера:")
                         }
 
                         C.Slider {
@@ -1624,7 +1624,7 @@ DialogView {
                                     leftMargin: 10
                                 }
                                 text: {
-                                    (parent.value * 10).toFixed(0) + qsTr(" ms")
+                                    (parent.value * 10).toFixed(0) + qsTr(" мс")
                                 }
                             }
                         }
@@ -1636,7 +1636,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Audio Volume:")
+                            text: qsTr("Громкость звука:")
                         }
 
                         C.Slider {
@@ -1654,7 +1654,7 @@ DialogView {
                                     leftMargin: 10
                                 }
                                 text: {
-                                    ((parent.value / 128.0) * 100).toFixed(0) + qsTr("% volume")
+                                    ((parent.value / 128.0) * 100).toFixed(0) + qsTr("% громкости")
                                 }
                             }
                         }
@@ -1666,7 +1666,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Start Mic Unmuted:")
+                            text: qsTr("Включать микрофон при запуске:")
                         }
 
                         C.CheckBox {
@@ -1676,17 +1676,17 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Speech Processing:")
+                            text: qsTr("Обработка речи:")
                             visible: typeof Chiaki.settings.speechProcessing !== "undefined"
                         }
 
                         C.CheckBox {
-                            text: qsTr("Noise suppression + echo cancellation")
+                            text: qsTr("Подавление шума и эхо")
                             checked: Chiaki.settings.speechProcessing
                             onToggled: Chiaki.settings.speechProcessing = !Chiaki.settings.speechProcessing
                             visible: typeof Chiaki.settings.speechProcessing !== "undefined"
@@ -1694,13 +1694,13 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                             visible: typeof Chiaki.settings.speechProcessing !== "undefined"
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Noise To Suppress:")
+                            text: qsTr("Подавление шума:")
                             visible: if (typeof Chiaki.settings.speechProcessing !== "undefined") {Chiaki.settings.speechProcessing} else {false}
                         }
 
@@ -1719,7 +1719,7 @@ DialogView {
                                     verticalCenter: parent.verticalCenter
                                     leftMargin: 10
                                 }
-                                text: qsTr("%1 dB").arg(parent.value)
+                                text: qsTr("%1 дБ").arg(parent.value)
                             }
                         }
 
@@ -1731,7 +1731,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Echo To Suppress:")
+                            text: qsTr("Подавление эха:")
                             visible: if (typeof Chiaki.settings.speechProcessing !== "undefined") {Chiaki.settings.speechProcessing} else {false}
                         }
 
@@ -1750,7 +1750,7 @@ DialogView {
                                     verticalCenter: parent.verticalCenter
                                     leftMargin: 10
                                 }
-                                text: qsTr("%1 dB").arg(parent.value)
+                                text: qsTr("%1 дБ").arg(parent.value)
                             }
                         }
 
@@ -1762,7 +1762,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Weak Wifi Notification:")
+                            text: qsTr("Уведомление о слабом Wi-Fi:")
                         }
 
                         C.Slider {
@@ -1790,7 +1790,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Packet Loss Reported Max:")
+                            text: qsTr("Максимальный отображаемый уровень потери пакетов:")
                         }
 
                         C.Slider {
@@ -1807,7 +1807,7 @@ DialogView {
                                     verticalCenter: parent.verticalCenter
                                     leftMargin: 10
                                 }
-                                text: qsTr("%1% packet loss").arg(parent.value)
+                                text: qsTr("потеря пакетов: %1%").arg(parent.value)
                             }
                         }
 
@@ -1818,7 +1818,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Request IDR Frame on FEC Failure")
+                            text: qsTr("Запрашивать IDR-кадр при ошибке FEC")
                         }
 
                         C.CheckBox {
@@ -1828,12 +1828,12 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Show Stream Stats During Gameplay")
+                            text: qsTr("Показывать статистику трансляции во время игры")
                         }
 
                         C.CheckBox {
@@ -1844,7 +1844,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                         }
                     }
                 }
@@ -1892,7 +1892,7 @@ DialogView {
                             rightPadding: 30
                             bottomPadding: 26
                             firstInFocusChain: true
-                            text: qsTr("Register New")
+                            text: qsTr("Зарегистрировать новую")
                             onClicked: root.showRegistDialog("255.255.255.255", true)
                             Material.roundedScale: Material.SmallScale
                         }
@@ -1900,7 +1900,7 @@ DialogView {
                         Label {
                             id: consolesLabel
                             Layout.alignment: Qt.AlignHCenter
-                            text: qsTr("Registered Consoles")
+                            text: qsTr("Зарегистрированные консоли")
                             font.bold: true
                         }
 
@@ -1937,7 +1937,7 @@ DialogView {
                                         verticalCenter: parent.verticalCenter
                                         leftMargin: 20
                                     }
-                                    text: qsTr("Auto-Connect")
+                                    text: qsTr("Автоподключение")
                                     checked: Chiaki.settings.autoConnectMac == modelData.mac
                                     onToggled: Chiaki.settings.autoConnectMac = checked ? modelData.mac : "";
 
@@ -2082,7 +2082,7 @@ DialogView {
                                         verticalCenter: parent.verticalCenter
                                         rightMargin: 20
                                     }
-                                    text: qsTr("Delete")
+                                    text: qsTr("Удалить")
                                     onClicked: root.showConfirmDialog(qsTr("Delete Console"), qsTr("Are you sure you want to delete this console?"), () => Chiaki.settings.deleteRegisteredHost(index));
                                     Material.roundedScale: Material.SmallScale
                                     Material.accent: Material.Red
@@ -2093,7 +2093,7 @@ DialogView {
                         Label {
                             id: hiddenConsolesLabel
                             Layout.alignment: Qt.AlignHCenter
-                            text: qsTr("Hidden Consoles")
+                            text: qsTr("Скрытые консоли")
                             font.bold: true
                         }
                         ListView {
@@ -2165,8 +2165,8 @@ DialogView {
                                         verticalCenter: parent.verticalCenter
                                         rightMargin: 20
                                     }
-                                    text: qsTr("Unhide")
-                                    onClicked: root.showConfirmDialog(qsTr("Unhide Console"), qsTr("Are you sure you want to unhide this console?"), () => Chiaki.unhideHost(modelData.mac));
+                                    text: qsTr("Показать")
+                                    onClicked: root.showConfirmDialog(qsTr("Показать консоль"), qsTr("Вы действительно хотите снова показать эту консоль?"), () => Chiaki.unhideHost(modelData.mac));
                                     Material.roundedScale: Material.SmallScale
                                     Material.accent: Material.Red
                                 }
@@ -2216,7 +2216,7 @@ DialogView {
 
                         Button {
                             id: resetAllKeys
-                            text: "Reset All Keys"
+                            text: "Сбросить все клавиши"
                             Layout.alignment: Qt.AlignRight
                             property bool firstInFocusChain: true
                             property bool lastInFocusChain: false
@@ -2275,7 +2275,7 @@ DialogView {
                         }
 
                         CheckBox {
-                            text: qsTr("Keyboard as controller")
+                            text: qsTr("Использовать клавиатуру как контроллер")
                             checked: {
                                 Chiaki.settings.keyboardEnabled
                             }
@@ -2347,7 +2347,7 @@ DialogView {
                             }
                         }
                         CheckBox {
-                            text: qsTr("Enable Mouse Touchpad")
+                            text: qsTr("Использовать мышь как сенсорную панель")
                             checked: {
                                 Chiaki.settings.mouseTouchEnabled
                             }
@@ -2550,7 +2550,7 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             id: controllerMappingChange
                             firstInFocusChain: true
-                            text: "Change Controller Mapping"
+                            text: "Изменить раскладку контроллера"
                             onClicked: controllerMappingDialog.show({
                                 reset: false
                             });
@@ -2558,7 +2558,7 @@ DialogView {
                         C.Button {
                             Layout.alignment: Qt.AlignHCenter
                             id: controllerMappingReset
-                            text: "Reset Controller Mapping"
+                            text: "Сбросить раскладку контроллера"
                             onClicked: controllerMappingDialog.show({
                                 reset: true
                             });
@@ -2569,11 +2569,11 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Background Controller Events:")
+                                text: qsTr("Обработка событий контроллера в фоне:")
                             }
                             C.CheckBox {
                                 id: backgroundController
-                                text: qsTr("Process controller input when application is in background")
+                                text: qsTr("Обрабатывать ввод контроллера, когда приложение работает в фоне")
                                 checked: {
                                     Chiaki.settings.allowJoystickBackgroundEvents
                                 }
@@ -2582,7 +2582,7 @@ DialogView {
 
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("(Checked)")
+                                text: qsTr("(Включено)")
                             }
                         }
                         RowLayout {
@@ -2590,7 +2590,7 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Dpad Touchpad Emulation")
+                                text: qsTr("Эмуляция сенсорной панели крестовиной")
                             }
                             C.CheckBox {
                                 id: dpadTouch
@@ -2610,7 +2610,7 @@ DialogView {
 
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("(Checked)")
+                                text: qsTr("(Включено)")
                             }
                         }
 
@@ -2621,7 +2621,7 @@ DialogView {
                             visible: Chiaki.settings.dpadTouchEnabled
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Dpad Touch Increment:")
+                                text: qsTr("Шаг перемещения крестовины:")
                             }
 
                             C.Slider {
@@ -2639,7 +2639,7 @@ DialogView {
                                         verticalCenter: parent.verticalCenter
                                         leftMargin: 10
                                     }
-                                    text: qsTr("%1 mm").arg(parent.value / 100)
+                                    text: qsTr("%1 мм").arg(parent.value / 100)
                                 }
                                 KeyNavigation.priority: KeyNavigation.BeforeItem
                                 KeyNavigation.up: dpadTouch
@@ -2663,14 +2663,14 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Dpad Regular/Touch Combo:")
+                                text: qsTr("Сочетание обычной крестовины / сенсорного режима:")
                             }
 
                             C.ComboBox {
                                 id: dpadShortcut1
                                 implicitContentWidthPolicy: ComboBox.WidestText
                                 firstInFocusChain: false
-                                model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                                model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                                 currentIndex: Chiaki.settings.dpadTouchShortcut1
                                 onActivated: index => Chiaki.settings.dpadTouchShortcut1 = index
                                 KeyNavigation.priority: {
@@ -2689,7 +2689,7 @@ DialogView {
                                 id: dpadShortcut2
                                 implicitContentWidthPolicy: ComboBox.WidestText
                                 firstInFocusChain: false
-                                model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                                model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                                 currentIndex: Chiaki.settings.dpadTouchShortcut2
                                 onActivated: index => Chiaki.settings.dpadTouchShortcut2 = index
                                 KeyNavigation.priority: {
@@ -2708,7 +2708,7 @@ DialogView {
                                 id: dpadShortcut3
                                 implicitContentWidthPolicy: ComboBox.WidestText
                                 firstInFocusChain: false
-                                model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                                model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                                 currentIndex: Chiaki.settings.dpadTouchShortcut3
                                 onActivated: index => Chiaki.settings.dpadTouchShortcut3 = index
                                 KeyNavigation.priority: {
@@ -2727,7 +2727,7 @@ DialogView {
                                 id: dpadShortcut4
                                 implicitContentWidthPolicy: ComboBox.WidestText
                                 firstInFocusChain: false
-                                model: [qsTr("Not Used"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Dpad Left"), qsTr("Dpad Right"), qsTr("Dpad Up"), qsTr("Dpad Down"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Touchpad"), qsTr("PS")]
+                                model: [qsTr("Не используется"), qsTr("Cross"), qsTr("Moon"), qsTr("Box"), qsTr("Pyramid"), qsTr("Крестовина влево"), qsTr("Крестовина вправо"), qsTr("Крестовина вверх"), qsTr("Крестовина вниз"), qsTr("L1"), qsTr("R1"), qsTr("L3"), qsTr("R3"), qsTr("Options"), qsTr("Share"), qsTr("Сенсорная панель"), qsTr("PS")]
                                 currentIndex: Chiaki.settings.dpadTouchShortcut4
                                 onActivated: index => Chiaki.settings.dpadTouchShortcut4 = index
                                 KeyNavigation.priority: {
@@ -2752,12 +2752,12 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Buttons By Position:")
+                                text: qsTr("Кнопки по расположению:")
                             }
 
                             C.CheckBox {
                                 id: posButtons
-                                text: qsTr("Use buttons by position instead of by label")
+                                text: qsTr("Использовать расположение кнопок вместо их обозначений")
                                 checked: Chiaki.settings.buttonsByPosition
                                 onToggled: Chiaki.settings.buttonsByPosition = checked
                                 KeyNavigation.priority: KeyNavigation.BeforeItem
@@ -2774,7 +2774,7 @@ DialogView {
 
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("(Unchecked)")
+                                text: qsTr("(Выключено)")
                             }
                         }
                         RowLayout {
@@ -2782,13 +2782,13 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("Rumble Haptics:")
+                                text: qsTr("Виброотдача:")
                             }
 
                             C.ComboBox {
                                 id: rumbleHaptics
                                 Layout.preferredWidth: 400
-                                model: [qsTr("Off"), qsTr("Very Weak"), qsTr("Weak"), qsTr("Normal"), qsTr("Strong"), qsTr("Very Strong")]
+                                model: [qsTr("Выключена"), qsTr("Очень слабая"), qsTr("Слабая"), qsTr("Обычная"), qsTr("Сильная"), qsTr("Очень сильная")]
                                 currentIndex: Chiaki.settings.rumbleHapticsIntensity
                                 onActivated: (index) => Chiaki.settings.rumbleHapticsIntensity = index;
                             }
@@ -2803,7 +2803,7 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Label {
                                 Layout.alignment: Qt.AlignRight
-                                text: qsTr("True Haptics Intensity:")
+                                text: qsTr("Интенсивность тактильной отдачи:")
                             }
 
                             C.Slider {
@@ -2823,9 +2823,9 @@ DialogView {
                                     }
                                     text: {
                                         if(parent.value > 0.99 && parent.value < 1.01)
-                                            qsTr("console setting")
+                                            qsTr("настройка консоли")
                                         else
-                                            (parent.value * 100).toFixed(0) + qsTr(" % console setting")
+                                            (parent.value * 100).toFixed(0) + qsTr("% от настройки консоли")
                                     }
                                 }
                             }
@@ -2874,7 +2874,7 @@ DialogView {
                             Layout.alignment: Qt.AlignHCenter
                             Layout.columnSpan: 3
 
-                            text: qsTr("Login to PSN")
+                            text: qsTr("Войти в PSN")
                             onClicked: {
                                 root.showPSNTokenDialog(false)
                             }
@@ -2888,7 +2888,7 @@ DialogView {
                             leftPadding: 30
                             rightPadding: 30
                             bottomPadding: 26
-                            text: qsTr("Clear PSN Token")
+                            text: qsTr("Удалить токен PSN")
                             firstInFocusChain: !openPsnLogin.visible
                             Layout.alignment: Qt.AlignHCenter
                             Layout.columnSpan: 3
@@ -2906,24 +2906,24 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Hole Punching Port Guessing:")
+                            text: qsTr("Подбор портов для Hole Punching:")
                         }
 
                         C.CheckBox {
                             id: holePunchGuessingCheckbox
-                            text: qsTr("Force STUN port guessing")
+                            text: qsTr("Принудительно подбирать порт STUN")
                             checked: Chiaki.settings.portGuessingEnabled
                             onToggled: Chiaki.settings.portGuessingEnabled = checked
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("(Unchecked)")
+                            text: qsTr("(Выключено)")
                         }
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Port Guess Count:")
+                            text: qsTr("Количество попыток подбора порта:")
                         }
 
                         C.Slider {
@@ -2941,7 +2941,7 @@ DialogView {
                                     verticalCenter: parent.verticalCenter
                                     leftMargin: 10
                                 }
-                                text: parent.value + qsTr(" guesses")
+                                text: parent.value + qsTr(" попыток")
                             }
                         }
 
@@ -2953,7 +2953,7 @@ DialogView {
 
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Port Guess Socket Count:")
+                            text: qsTr("Количество сокетов для подбора порта:")
                         }
 
                         C.Slider {
@@ -2972,7 +2972,7 @@ DialogView {
                                     verticalCenter: parent.verticalCenter
                                     leftMargin: 10
                                 }
-                                text: parent.value + qsTr(" sockets")
+                                text: parent.value + qsTr(" сокетов")
                             }
                         }
 
@@ -3016,16 +3016,16 @@ DialogView {
                         Label {
                             text: {
                                 if(Chiaki.settings.currentProfile)
-                                    qsTr("Current Profile: ") + Chiaki.settings.currentProfile
+                                    qsTr("Текущий профиль: ") + Chiaki.settings.currentProfile
                                 else
-                                    qsTr("Current Profile: default")
+                                    qsTr("Текущий профиль: по умолчанию")
                             }
                         }
 
                         C.Button {
                             id: profile
                             firstInFocusChain: true
-                            text: qsTr("Manage Profiles")
+                            text: qsTr("Управление профилями")
                             onClicked: {
                                 root.showProfileDialog()
                             }
@@ -3034,7 +3034,7 @@ DialogView {
 
                     C.Button {
                         id: exportButton
-                        text: qsTr("Export settings to file")
+                        text: qsTr("Экспортировать настройки в файл")
                         onClicked: {
                             Chiaki.settings.exportSettings();
                         }
@@ -3043,7 +3043,7 @@ DialogView {
 
                     C.Button {
                         id: importButton
-                        text: qsTr("Import settings from file")
+                        text: qsTr("Импортировать настройки из файла")
                         onClicked: {
                             Chiaki.settings.importSettings();
                         }
@@ -3052,19 +3052,19 @@ DialogView {
 
                     C.Button {
                         id: aboutButton
-                        text: qsTr("About %1-ng").arg(Qt.application.name)
+                        text: qsTr("О программе %1-ng").arg(Qt.application.name)
                         onClicked: aboutDialog.open()
                         Material.roundedScale: Material.SmallScale
                     }
 
                     C.CheckBox {
-                        text: qsTr("Sanitize Logs (checked)")
+                        text: qsTr("Скрывать личные данные в журналах (включено)")
                         checked: Chiaki.settings.logSanitize
                         onToggled: Chiaki.settings.logSanitize = checked
                     }
 
                         C.CheckBox {
-                            text: qsTr("Verbose Logging (unchecked)")
+                            text: qsTr("Подробное журналирование (выключено)")
                             checked: Chiaki.settings.logVerbose
                             lastInFocusChain: true
                             onToggled: Chiaki.settings.logVerbose = checked
@@ -3113,7 +3113,7 @@ DialogView {
             parent: Overlay.overlay
             x: Math.round((root.width - width) / 2)
             y: Math.round((root.height - height) / 2)
-            title: qsTr("About %1-ng").arg(Qt.application.name)
+            title: qsTr("О программе %1-ng").arg(Qt.application.name)
             modal: true
             standardButtons: Dialog.Ok
             Material.roundedScale: Material.MediumScale
@@ -3160,7 +3160,7 @@ DialogView {
             parent: Overlay.overlay
             x: Math.round((root.width - width) / 2)
             y: Math.round((root.height - height) / 2)
-            title: qsTr("Key Capture")
+            title: qsTr("Назначение клавиши")
             modal: true
             standardButtons: Dialog.Close
             closePolicy: Popup.CloseOnPressOutside
@@ -3188,7 +3188,7 @@ DialogView {
             Label {
                 id: keyLabel
                 focus: true
-                text: qsTr("Press any key to configure button or click close")
+                text: qsTr("Нажмите любую клавишу для назначения кнопки или закройте окно")
                 Keys.onReleased: (event) => {
                     var name = Chiaki.settings.changeControllerKey(keyDialog.buttonValue, event.key);
                     keyDialog.buttonCallback(name);
@@ -3204,7 +3204,7 @@ DialogView {
             parent: Overlay.overlay
             x: Math.round((root.width - width) / 2)
             y: Math.round((root.height - height) / 2)
-            title: qsTr("Controller Capture")
+            title: qsTr("Назначение контроллера")
             modal: true
             standardButtons: Dialog.Close
             closePolicy: Popup.CloseOnPressOutside
@@ -3239,7 +3239,7 @@ DialogView {
             }
             Label {
                 id: controllerLabel
-                text: qsTr("Choose the controller by pressing any button on the controller")
+                text: qsTr("Выберите контроллер, нажав любую кнопку на нём")
             }
         }
 
@@ -3249,7 +3249,7 @@ DialogView {
             parent: Overlay.overlay
             x: Math.round((root.width - width) / 2)
             y: Math.round((root.height - height) / 2)
-            title: qsTr("Controller Managed by Steam")
+            title: qsTr("Контроллер управляется Steam")
             modal: true
             standardButtons: Dialog.Close
             closePolicy: Popup.NoAutoClose
@@ -3268,7 +3268,7 @@ DialogView {
             Label {
                 id: steamLabel
                 wrapMode: TextEdit.Wrap
-                text: qsTr("This controller is managed by Steam.\nPlease use Steam to map controller or disable Steam Input for the controller before mapping here.")
+                text: qsTr("Этот контроллер управляется Steam.\nНазначьте кнопки в Steam или отключите Steam Input для этого контроллера, прежде чем менять раскладку здесь.")
                 Keys.onReturnPressed: steamControllerMappingDialog.close();
                 Keys.onEscapePressed: steamControllerMappingDialog.close();
             }
