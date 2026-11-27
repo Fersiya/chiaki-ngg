@@ -9,8 +9,8 @@ import "controls" as C
 
 DialogView {
     property var consoleIndex
-    title: qsTr("Set console pin")
-    buttonText: qsTr("Set")
+    title: qsTr("Установить PIN-код консоли")
+    buttonText: qsTr("Установить")
     buttonEnabled: pin.acceptableInput
     onAccepted: {
         Chiaki.setConsolePin(consoleIndex, pin.text.trim());
@@ -28,7 +28,7 @@ DialogView {
             columnSpacing: 20
                         Label {
                             Layout.alignment: Qt.AlignRight
-                            text: qsTr("Remote Play PIN (4 digits):")
+                            text: qsTr("PIN-код Remote Play (4 цифры):")
                         }
 
                         TextField {
