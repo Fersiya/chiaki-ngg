@@ -59,7 +59,7 @@ Dialog {
             spacing: 20
 
             Button {
-                text: qsTr("Yes")
+                text: qsTr("Да")
                 Material.background: Material.accent
                 flat: true
                 leftPadding: 50
@@ -81,7 +81,7 @@ Dialog {
 
             Button {
                 Material.background: Material.accent
-                text: qsTr("No")
+                text: qsTr("Нет")
                 flat: true
                 leftPadding: 50
                 onClicked: dialog.reject()
