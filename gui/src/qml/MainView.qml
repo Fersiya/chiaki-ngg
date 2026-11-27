@@ -263,9 +263,9 @@ Pane {
                         if (modelData.name)
                             t += modelData.name + "\n";
                         if (modelData.address)
-                            t += qsTr("Адрес: %1").arg(Chiaki.settings.streamerMode ? "hidden" : modelData.address);
+                            t += qsTr("Адрес: %1").arg(Chiaki.settings.streamerMode ? "скрыто" : modelData.address);
                         if (modelData.mac)
-                            t += "\n" + qsTr("Идентификатор: %1 (%2)").arg(Chiaki.settings.streamerMode ? "hidden" : modelData.mac).arg(modelData.registered ? qsTr("зарегистрирована") : qsTr("не зарегистрирована"));
+                            t += "\n" + qsTr("Идентификатор: %1 (%2)").arg(Chiaki.settings.streamerMode ? "скрыто" : modelData.mac).arg(modelData.registered ? qsTr("зарегистрирована") : qsTr("не зарегистрирована"));
                         if (modelData.duid)
                         {
                             if(modelData.discovered)
