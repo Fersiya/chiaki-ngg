@@ -1058,23 +1058,31 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_session_create(Session* session)
                 const char *json_str = json_object_to_json_string_ext(notif->json, JSON_C_TO_STRING_PRETTY);
                 CHIAKI_LOGV(session->log, "chiaki_holepunch_session_create: JSON was:\n%s", json_str);
                 err = CHIAKI_ERR_UNKNOWN;
-                break;
-            }
-            const char *online_id = json_object_get_string(online_id_json);
-            if (!online_id_json)
-            {
-                CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: could not extra PSN online id string.");
-                err = CHIAKI_ERR_UNKNOWN;
+                chiaki_mutex_unlock(&session->state_mutex);
+                clear_notification(session, notif);
                 return err;
             }
-            session->online_id = malloc((strlen(online_id) + 1) * sizeof(char));
-            if(!session->online_id)
+            const char *online_id = json_object_get_string(online_id_json);
+            if (!online_id)
+            {
+                CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: could not extract PSN online id string.");
+                err = CHIAKI_ERR_UNKNOWN;
+                chiaki_mutex_unlock(&session->state_mutex);
+                clear_notification(session, notif);
+                return err;
+            }
+            char *online_id_copy = malloc(strlen(online_id) + 1);
+            if(!online_id_copy)
             {
                 CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: could not allocate space for PSN online id string.");
                 err = CHIAKI_ERR_MEMORY;
+                chiaki_mutex_unlock(&session->state_mutex);
+                clear_notification(session, notif);
                 return err;
             }
-            strcpy(session->online_id, online_id);
+            strcpy(online_id_copy, online_id);
+            free(session->online_id);
+            session->online_id = online_id_copy;
         }
         else if (notif->type == NOTIFICATION_TYPE_MEMBER_CREATED)
         {
@@ -1085,6 +1093,8 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_session_create(Session* session)
         {
             CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: Got unexpected notification of type %d", notif->type);
             err = CHIAKI_ERR_UNKNOWN;
+            chiaki_mutex_unlock(&session->state_mutex);
+            clear_notification(session, notif);
             return err;
         }
         chiaki_mutex_lock(&session->stop_mutex);
@@ -1094,6 +1104,8 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_session_create(Session* session)
             chiaki_mutex_unlock(&session->stop_mutex);
             CHIAKI_LOGI(session->log, "chiaki_holepunch_session_create: canceled");
             err = CHIAKI_ERR_CANCELED;
+            chiaki_mutex_unlock(&session->state_mutex);
+            clear_notification(session, notif);
             return err;
         }
         chiaki_mutex_unlock(&session->stop_mutex);
