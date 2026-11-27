@@ -551,7 +551,7 @@ Item {
 
             ToolButton {
                 id: zoomButton
-                text: qsTr("Zoom")
+                text: qsTr("Масштаб")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoMode == ChiakiWindow.VideoMode.Zoom
@@ -661,7 +661,7 @@ Item {
 
             ToolButton {
                 id: highQualitySpatialButton
-                text: qsTr("HQ + Spatial")
+                text: qsTr("Высокое качество + пространственное масштабирование")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.HighQualitySpatial
@@ -677,7 +677,7 @@ Item {
 
             ToolButton {
                 id: highQualityAdvancedSpatialButton
-                text: qsTr("HQ + Adv Spatial")
+                text: qsTr("Высокое качество + улучшенное пространственное масштабирование")
                 padding: 10
                 checkable: true
                 checked: Chiaki.window.videoPreset == ChiakiWindow.VideoPreset.HighQualityAdvancedSpatial
@@ -974,7 +974,7 @@ Item {
                     Layout.preferredWidth: 200
                     Layout.minimumHeight: 80
                     Layout.maximumHeight: 80
-                    text: qsTr("No")
+                    text: qsTr("Нет")
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
@@ -1072,7 +1072,7 @@ Item {
                     Layout.preferredWidth: 200
                     Layout.minimumHeight: 80
                     Layout.maximumHeight: 80
-                    text: qsTr("No")
+                    text: qsTr("Нет")
                     font.pixelSize: 24
                     Material.roundedScale: Material.SmallScale
                     Material.background: activeFocus ? parent.Material.accent : undefined
