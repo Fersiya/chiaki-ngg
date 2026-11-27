@@ -65,7 +65,9 @@ WindowsWakeSleep::WindowsWakeSleep(QObject *parent)
         PVOID Context;
     } DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS, *PDEVICE_NOTIFY_SUBSCRIBE_PARAMETERS;
 #endif
-    static DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS sleepCallback = {
+    // Register this instance as the callback context. Keep the parameters
+    // local: RegisterSuspendResumeNotification copies them during registration.
+    DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS sleepCallback = {
         MySleepCallBack,
         this
     };
@@ -80,7 +82,8 @@ WindowsWakeSleep::WindowsWakeSleep(QObject *parent)
 WindowsWakeSleep::~WindowsWakeSleep()
 {
     // unregister for system sleep notifications
-    UnregisterSuspendResumeNotification(hPowerNotify);
+    if(hPowerNotify)
+        UnregisterSuspendResumeNotification(hPowerNotify);
 }
 
 void WindowsWakeSleep::setWakeState(WindowsWakeState state)
