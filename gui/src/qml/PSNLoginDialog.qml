@@ -14,9 +14,9 @@ DialogView {
     property bool submitting: false
     property bool closing: false
     property var psnurl: ""
-    title: qsTr("PSN Login")
+    title: qsTr("Вход в PSN")
     buttonVisible: false
-    buttonText: qsTr("Get Account ID")
+    buttonText: qsTr("Получить ID учётной записи")
     buttonEnabled: !submitting && url.text.trim()
     onAccepted: {
         submitting = true;
@@ -90,7 +90,7 @@ DialogView {
                         Layout.fillHeight: true
                         Layout.preferredWidth: 350
                         flat: true
-                        text: "reload + clear cookies"
+                        text: "Перезагрузить и очистить cookies"
                         Image {
                             anchors {
                                 left: parent.left
@@ -133,7 +133,7 @@ DialogView {
                             source: "qrc:/icons/r1.svg"
                         }
                         focusPolicy: Qt.NoFocus
-                        text: "Use external browser"
+                        text: "Открыть во внешнем браузере"
                         onClicked: {
                             nativeLoginForm.visible = false;
                             psnLoginToolbar.visible = false;
@@ -185,7 +185,7 @@ DialogView {
                 columnSpacing: 20
                 Label {
                     id: nativeErrorHeader
-                    text: "Retrieving PSN account ID failed with error: "
+                    text: "Не удалось получить ID учётной записи PSN. Ошибка: "
                     Layout.fillHeight: true
                     Layout.preferredWidth: 400
                     Layout.leftMargin: 20
@@ -200,7 +200,7 @@ DialogView {
 
                 Label {
                     id: retryButton
-                    text: "Retry process"
+                    text: "Повторить попытку"
                     Layout.fillHeight: true
                     Layout.preferredWidth: 300
                     Layout.leftMargin: 20
@@ -208,7 +208,7 @@ DialogView {
                 C.Button {
                     firstInFocusChain: true
                     lastInFocusChain: true
-                    text: "Retry"
+                    text: "Повторить"
                     onClicked: {
                         nativeErrorGrid.visible = false;
                         nativeErrorLabel.text = "";
@@ -289,7 +289,7 @@ DialogView {
             Label {
                 id: errorHeader
                 visible: false
-                text: "Retrieving PSN account ID failed with error"
+                text: "Не удалось получить ID учётной записи PSN"
             }
 
             Label {
@@ -298,7 +298,7 @@ DialogView {
             }
 
             Label {
-                text: qsTr("Open Web Browser with copied URL")
+                text: qsTr("Открыть браузер с скопированной ссылкой")
                 visible: psnurl
             }
 
@@ -312,7 +312,7 @@ DialogView {
 
             C.Button {
                 id: copyUrl
-                text: qsTr("Click to Re-Copy URL")
+                text: qsTr("Нажмите, чтобы скопировать ссылку повторно")
                 onClicked: {
                     openurl.selectAll()
                     openurl.copy()
@@ -324,7 +324,7 @@ DialogView {
             }
 
             Label {
-                text: qsTr("Redirect URL from Web Browser")
+                text: qsTr("Ссылка перенаправления из браузера")
             }
 
             TextField {
@@ -347,7 +347,7 @@ DialogView {
                 KeyNavigation.right: pasteUrl
                 C.Button {
                     id: pasteUrl
-                    text: qsTr("Click to Paste URL")
+                    text: qsTr("Нажмите, чтобы вставить ссылку")
                     anchors {
                         left: parent.right
                         verticalCenter: parent.verticalCenter
@@ -381,7 +381,7 @@ DialogView {
                 id: formLabel
                 Layout.alignment: Qt.AlignCenter
                 Layout.bottomMargin: 50
-                text: qsTr("This requires your PSN privacy settings to allow anyone to find you in your search")
+                text: qsTr("В настройках конфиденциальности PSN должно быть разрешено находить вас через поиск")
             }
 
             C.TextField {
@@ -390,7 +390,7 @@ DialogView {
                 Layout.preferredWidth: 400
                 Layout.alignment: Qt.AlignCenter
                 firstInFocusChain: true
-                placeholderText: qsTr("Username")
+                placeholderText: qsTr("Имя пользователя")
                 onAccepted: submitButton.clicked()
             }
 
@@ -399,7 +399,7 @@ DialogView {
                 Layout.preferredWidth: 400
                 Layout.alignment: Qt.AlignCenter
                 lastInFocusChain: true
-                text: qsTr("Submit")
+                text: qsTr("Отправить")
                 onClicked: {
                     const username = usernameField.text.trim();
                     if (!username.length || !enabled)
@@ -414,7 +414,7 @@ DialogView {
                                 dialog.close();
                             } else {
                                 enabled = true;
-                                formLabel.text = qsTr("Error: %1!").arg(response["error"]);
+                                formLabel.text = qsTr("Ошибка: %1!").arg(response["error"]);
                             }
                         }
                     }

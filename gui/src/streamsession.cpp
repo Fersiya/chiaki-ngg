@@ -544,7 +544,7 @@ StreamSession::StreamSession(const StreamSessionConnectInfo &connect_info, QObje
 		chiaki_connect_info.holepunch_session = holepunch_session;
         QByteArray psn_account_id = QByteArray::fromBase64(connect_info.psn_account_id.toUtf8());
         if (psn_account_id.size() != CHIAKI_PSN_ACCOUNT_ID_SIZE) {
-            throw ChiakiException((tr("Invalid Account-ID"), tr("The PSN Account-ID must be exactly %1 bytes encoded as base64.")).arg(CHIAKI_PSN_ACCOUNT_ID_SIZE));
+            throw ChiakiException((tr("Неверный ID учётной записи"), tr("ID учётной записи PSN должен содержать ровно %1 байт в кодировке Base64.")).arg(CHIAKI_PSN_ACCOUNT_ID_SIZE));
         }
         memcpy(chiaki_connect_info.psn_account_id, psn_account_id.constData(), CHIAKI_PSN_ACCOUNT_ID_SIZE);
 	}
