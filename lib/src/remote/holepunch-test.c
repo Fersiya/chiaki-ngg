@@ -52,7 +52,7 @@ int main(int argc, char **argv)
             return 1;
         }
     }
-    printf("Using OAuth token: %s\n", oauth_token);
+    printf("OAuth token loaded successfully\n");
 
     ChiakiLog log;
 	chiaki_log_init(&log, CHIAKI_LOG_ALL, chiaki_log_cb_print, NULL);
