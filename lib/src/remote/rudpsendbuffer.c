@@ -77,9 +77,16 @@ error_mutex:
 
 CHIAKI_EXPORT void chiaki_rudp_send_buffer_fini(ChiakiRudpSendBuffer *send_buffer)
 {
-	send_buffer->should_stop = true;
-	ChiakiErrorCode err = chiaki_cond_signal(&send_buffer->cond);
+	// The worker reads should_stop while holding this mutex in its condition predicates.
+	// Update it under the same mutex to avoid a data race.
+	ChiakiErrorCode err = chiaki_mutex_lock(&send_buffer->mutex);
 	assert(err == CHIAKI_ERR_SUCCESS);
+	send_buffer->should_stop = true;
+	err = chiaki_cond_signal(&send_buffer->cond);
+	assert(err == CHIAKI_ERR_SUCCESS);
+	err = chiaki_mutex_unlock(&send_buffer->mutex);
+	assert(err == CHIAKI_ERR_SUCCESS);
+
 	err = chiaki_thread_join(&send_buffer->thread, NULL);
 	assert(err == CHIAKI_ERR_SUCCESS);
 
@@ -91,7 +98,7 @@ CHIAKI_EXPORT void chiaki_rudp_send_buffer_fini(ChiakiRudpSendBuffer *send_buffe
 	free(send_buffer->packets);
 }
 
-static void GetRudpPacketType(ChiakiRudpSendBuffer *send_buffer, uint16_t packet_type, char *ptype, size_t ptype_size)
+static void GetRudpPacketType(uint16_t packet_type, char *ptype, size_t ptype_size)
 {
     RudpPacketType type = htons(packet_type);
     const char *name = NULL;
@@ -312,9 +319,16 @@ static void rudp_send_buffer_resend(ChiakiRudpSendBuffer *send_buffer)
 				continue;
 			}
 			char packet_type[32] = {0};
-			uint16_t raw_packet_type;
-			memcpy(&raw_packet_type, packet->buf + 6, sizeof(raw_packet_type));
-			GetRudpPacketType(send_buffer, raw_packet_type, packet_type, sizeof(packet_type));
+			if(packet->buf && packet->buf_size >= 8)
+			{
+				uint16_t raw_packet_type;
+				memcpy(&raw_packet_type, packet->buf + 6, sizeof(raw_packet_type));
+				GetRudpPacketType(raw_packet_type, packet_type, sizeof(packet_type));
+			}
+			else
+			{
+				snprintf(packet_type, sizeof(packet_type), "Short packet (%zu bytes)", packet->buf_size);
+			}
 			CHIAKI_LOGI(send_buffer->log, "rudp Send Buffer re-sending packet with seqnum %#lx and type %s, tries: %llu", (unsigned long)packet->seq_num, packet_type, (unsigned long long)packet->tries);
 			packet->last_send_ms = now;
 			chiaki_rudp_send_raw(send_buffer->rudp, packet->buf, packet->buf_size);

@@ -4,6 +4,7 @@
 #include <chiaki/remote/rudpsendbuffer.h>
 
 #include <math.h>
+#include <limits.h>
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
@@ -182,7 +183,9 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_session_message(RudpInstance *rud
 CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_ack_message(RudpInstance *rudp, uint16_t remote_counter)
 {
     RudpMessage message;
+    chiaki_mutex_lock(&rudp->counter_mutex);
     uint16_t counter = rudp->counter;
+    chiaki_mutex_unlock(&rudp->counter_mutex);
     message.type = ACK;
     message.subMessage = NULL;
     message.data_size = 6;
@@ -211,7 +214,7 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_ctrl_message(RudpInstance *rudp, 
 {
     RudpMessage message;
     uint16_t counter = get_then_increase_counter(rudp);
-    uint16_t counter_ack = rudp->counter;
+    uint16_t counter_ack = chiaki_rudp_get_local_counter(rudp);
     message.type = CTRL_MESSAGE;
     message.subMessage = NULL;
     message.data_size = 2 + ctrl_message_size;
@@ -243,7 +246,7 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_switch_to_stream_connection_messa
 {
     RudpMessage message;
     uint16_t counter = get_then_increase_counter(rudp);
-    uint16_t counter_ack = rudp->counter;
+    uint16_t counter_ack = chiaki_rudp_get_local_counter(rudp);
     message.type = CTRL_MESSAGE;
     message.subMessage = NULL;
     message.data_size = 26;
@@ -371,24 +374,37 @@ static uint16_t get_then_increase_counter(RudpInstance *rudp)
 
 CHIAKI_EXPORT uint16_t chiaki_rudp_get_local_counter(RudpInstance *rudp)
 {
-    return rudp->counter;
+    chiaki_mutex_lock(&rudp->counter_mutex);
+    uint16_t counter = rudp->counter;
+    chiaki_mutex_unlock(&rudp->counter_mutex);
+    return counter;
 }
 
 CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_raw(RudpInstance *rudp, uint8_t *buf, size_t buf_size)
 {
     if(CHIAKI_SOCKET_IS_INVALID(rudp->sock))
-    {
         return CHIAKI_ERR_DISCONNECTED;
-    }
+    // Winsock's send() length parameter is an int. Reject oversized values
+    // before size_t can be narrowed when calling the socket API.
+    if(buf_size > INT_MAX)
+        return CHIAKI_ERR_OVERFLOW;
+    if(buf_size > 0 && !buf)
+        return CHIAKI_ERR_INVALID_DATA;
+
     CHIAKI_LOGV(rudp->log, "Sending Message:");
     chiaki_log_hexdump(rudp->log, CHIAKI_LOG_VERBOSE, buf, buf_size);
-	int sent = send(rudp->sock, (CHIAKI_SOCKET_BUF_TYPE) buf, buf_size, 0);
-	if(sent < 0)
-	{
-		CHIAKI_LOGE(rudp->log, "Rudp raw failed to send packet: " CHIAKI_SOCKET_ERROR_FMT, CHIAKI_SOCKET_ERROR_VALUE);
-		return CHIAKI_ERR_NETWORK;
-	}
-	return CHIAKI_ERR_SUCCESS;
+    CHIAKI_SSIZET_TYPE sent = send(rudp->sock, (CHIAKI_SOCKET_BUF_TYPE)buf, (int)buf_size, 0);
+    if(sent < 0)
+    {
+        CHIAKI_LOGE(rudp->log, "Rudp raw failed to send packet: " CHIAKI_SOCKET_ERROR_FMT, CHIAKI_SOCKET_ERROR_VALUE);
+        return CHIAKI_ERR_NETWORK;
+    }
+    if((size_t)sent != buf_size)
+    {
+        CHIAKI_LOGE(rudp->log, "Rudp raw sent an incomplete datagram (%zu of %zu bytes)", (size_t)sent, buf_size);
+        return CHIAKI_ERR_NETWORK;
+    }
+    return CHIAKI_ERR_SUCCESS;
 }
 
 CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_select_recv(RudpInstance *rudp, size_t buf_size,  RudpMessage *message)
@@ -458,24 +474,28 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_rudp_send_recv(RudpInstance *rudp, RudpMess
     bool success = false;
     for(int i = 0; i < tries; i++)
     {
+        ChiakiErrorCode send_err;
         switch(send_type)
         {
             case INIT_REQUEST:
-                chiaki_rudp_send_init_message(rudp);
+                send_err = chiaki_rudp_send_init_message(rudp);
                 break;
             case COOKIE_REQUEST:
-                chiaki_rudp_send_cookie_message(rudp, buf, buf_size);
+                send_err = chiaki_rudp_send_cookie_message(rudp, buf, buf_size);
                 break;
             case ACK:
-                chiaki_rudp_send_ack_message(rudp, remote_counter);
+                send_err = chiaki_rudp_send_ack_message(rudp, remote_counter);
                 break;
             case SESSION_MESSAGE:
-                chiaki_rudp_send_session_message(rudp, remote_counter, buf, buf_size);
+                send_err = chiaki_rudp_send_session_message(rudp, remote_counter, buf, buf_size);
                 break;
             default:
                 CHIAKI_LOGE(rudp->log, "Selected RudpPacketType 0x%04x to send that is not supported by rudp send receive.", send_type);
                 return CHIAKI_ERR_INVALID_DATA;
         }
+        if(send_err != CHIAKI_ERR_SUCCESS)
+            return send_err;
+
         ChiakiErrorCode err = chiaki_rudp_select_recv(rudp, 1500, message);
         if(err == CHIAKI_ERR_TIMEOUT)
             continue;

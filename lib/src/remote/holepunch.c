@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <assert.h>
 #include <inttypes.h>
+#include <errno.h>
 
 #ifdef _WIN32
 #ifndef WIN32_LEAN_AND_MEAN
@@ -581,7 +582,7 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_list_devices(
     *device_count = num_clients;
     for (size_t i = 0; i < num_clients; i++)
     {
-        ChiakiHolepunchDeviceInfo device;
+        ChiakiHolepunchDeviceInfo device = {0};
         device.type = console_type;
 
         json_object *client = json_object_array_get_idx(clients, i);
@@ -654,7 +655,7 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_list_devices(
             err = CHIAKI_ERR_UNKNOWN;
             goto cleanup_devices;
         }
-        strncpy(device.device_name, json_object_get_string(device_name), sizeof(device.device_name));
+        snprintf(device.device_name, sizeof(device.device_name), "%s", json_object_get_string(device_name));
         (*devices)[i] = device;
     }
 
@@ -1058,23 +1059,31 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_session_create(Session* session)
                 const char *json_str = json_object_to_json_string_ext(notif->json, JSON_C_TO_STRING_PRETTY);
                 CHIAKI_LOGV(session->log, "chiaki_holepunch_session_create: JSON was:\n%s", json_str);
                 err = CHIAKI_ERR_UNKNOWN;
-                break;
-            }
-            const char *online_id = json_object_get_string(online_id_json);
-            if (!online_id_json)
-            {
-                CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: could not extra PSN online id string.");
-                err = CHIAKI_ERR_UNKNOWN;
+                chiaki_mutex_unlock(&session->state_mutex);
+                clear_notification(session, notif);
                 return err;
             }
-            session->online_id = malloc((strlen(online_id) + 1) * sizeof(char));
-            if(!session->online_id)
+            const char *online_id = json_object_get_string(online_id_json);
+            if (!online_id)
+            {
+                CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: could not extract PSN online id string.");
+                err = CHIAKI_ERR_UNKNOWN;
+                chiaki_mutex_unlock(&session->state_mutex);
+                clear_notification(session, notif);
+                return err;
+            }
+            char *online_id_copy = malloc(strlen(online_id) + 1);
+            if(!online_id_copy)
             {
                 CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: could not allocate space for PSN online id string.");
                 err = CHIAKI_ERR_MEMORY;
+                chiaki_mutex_unlock(&session->state_mutex);
+                clear_notification(session, notif);
                 return err;
             }
-            strcpy(session->online_id, online_id);
+            strcpy(online_id_copy, online_id);
+            free(session->online_id);
+            session->online_id = online_id_copy;
         }
         else if (notif->type == NOTIFICATION_TYPE_MEMBER_CREATED)
         {
@@ -1085,6 +1094,8 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_session_create(Session* session)
         {
             CHIAKI_LOGE(session->log, "chiaki_holepunch_session_create: Got unexpected notification of type %d", notif->type);
             err = CHIAKI_ERR_UNKNOWN;
+            chiaki_mutex_unlock(&session->state_mutex);
+            clear_notification(session, notif);
             return err;
         }
         chiaki_mutex_lock(&session->stop_mutex);
@@ -1094,6 +1105,8 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_holepunch_session_create(Session* session)
             chiaki_mutex_unlock(&session->stop_mutex);
             CHIAKI_LOGI(session->log, "chiaki_holepunch_session_create: canceled");
             err = CHIAKI_ERR_CANCELED;
+            chiaki_mutex_unlock(&session->state_mutex);
+            clear_notification(session, notif);
             return err;
         }
         chiaki_mutex_unlock(&session->stop_mutex);
@@ -2074,15 +2087,20 @@ cleanup:
 static inline size_t curl_write_cb(
     void* ptr, size_t size, size_t nmemb, void* userdata)
 {
+    if (size != 0 && nmemb > SIZE_MAX / size)
+        return 0;
+
     size_t realsize = size * nmemb;
     HttpResponseData* response_data = (HttpResponseData*) userdata;
-    char* tmp = NULL;
-    tmp = realloc(response_data->data, response_data->size + realsize + 1);
+    if (realsize == SIZE_MAX || response_data->size > SIZE_MAX - realsize - 1)
+        return 0;
+
+    char* tmp = realloc(response_data->data, response_data->size + realsize + 1);
     if (tmp)
         response_data->data = tmp;
     else
     {
-        free(response_data->data);
+        // realloc failure leaves the original buffer valid; cleanup owns it.
         // TODO: Use Chiaki logger!
         fprintf(stderr, "curl_write_cb: realloc failed\n");
         return 0;
@@ -5681,7 +5699,7 @@ static ChiakiErrorCode session_message_parse(
         }
         for (size_t i = 0; i < num_candidates; i++)
         {
-            Candidate candidate;
+            Candidate candidate = {0};
             json_object *candidate_json = json_object_array_get_idx(obj, i);
 
             json_object *jobj = NULL;
@@ -5708,7 +5726,7 @@ static ChiakiErrorCode session_message_parse(
                 goto invalid_schema;
             }
             const char *addr_str = json_object_get_string(jobj);
-            strncpy(candidate.addr, addr_str, sizeof(candidate.addr));
+            snprintf(candidate.addr, sizeof(candidate.addr), "%s", addr_str);
 
             json_object_object_get_ex(candidate_json, "mappedAddr", &jobj);
             if (jobj == NULL || !json_object_is_type(jobj, json_type_string))
@@ -5717,7 +5735,7 @@ static ChiakiErrorCode session_message_parse(
                 goto invalid_schema;
             }
             const char *mapped_addr_str = json_object_get_string(jobj);
-            strncpy(candidate.addr_mapped, mapped_addr_str, sizeof(candidate.addr_mapped));
+            snprintf(candidate.addr_mapped, sizeof(candidate.addr_mapped), "%s", mapped_addr_str);
 
             json_object_object_get_ex(candidate_json, "port", &jobj);
             if (jobj == NULL || !json_object_is_type(jobj, json_type_int))
@@ -5989,12 +6007,29 @@ static ChiakiErrorCode session_message_free(SessionMessage *message)
     return err;
 }
 
+static bool parse_stun_port(const char *text, uint16_t *port)
+{
+    if(!text || !*text || !port)
+        return false;
+    errno = 0;
+    char *end = NULL;
+    long value = strtol(text, &end, 10);
+    if(errno == ERANGE || end == text || value < 1 || value > 65535)
+        return false;
+    while(*end == ' ' || *end == '\t' || *end == '\r' || *end == '\n')
+        end++;
+    if(*end != '\0')
+        return false;
+    *port = (uint16_t)value;
+    return true;
+}
+
 /**
  * Gets stun servers from updated list of online STUN servers
  *
  * @param session Pointer to the holepunch session
  * @return ChiakiErrSuccess on success or error code on failure
-*/
+ */
 static ChiakiErrorCode get_stun_servers(Session *session)
 {
     ChiakiErrorCode err = CHIAKI_ERR_SUCCESS;
@@ -6007,9 +6042,14 @@ static ChiakiErrorCode get_stun_servers(Session *session)
     }
 
     HttpResponseData response_data = {
-        .data = malloc(0),
+        .data = calloc(1, 1),
         .size = 0,
     };
+    if(!response_data.data)
+    {
+        curl_easy_cleanup(curl);
+        return CHIAKI_ERR_MEMORY;
+    }
 
     CURLcode res = curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
     if(res != CURLE_OK)
@@ -6043,8 +6083,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         }
         goto cleanup;
     }
-    // hostname has max of 253 chars + 1 char for colon : + port has max of 4 chars + 1 char for null termination
-    char server_strings[10][259];
+    // Hostnames are at most 253 bytes; allow ':', a 5-digit port, optional CR, and NUL.
+    char server_strings[10][261];
     char *ptr = strtok(response_data.data, "\n");
     while(ptr != NULL && session->num_stun_servers <= 9)
     {
@@ -6066,30 +6106,48 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         {
             CHIAKI_LOGW(session->log, "Problem reading stun server list host");
             session->num_stun_servers = i;
-            return CHIAKI_ERR_INVALID_DATA;
+            err = CHIAKI_ERR_INVALID_DATA;
+            goto cleanup;
         }
         session->stun_server_list[i].host = malloc((strlen(ptr) + 1) * sizeof(char));
         if(!session->stun_server_list[i].host)
         {
             CHIAKI_LOGW(session->log, "Problem allocating memory for stun server list host");
             session->num_stun_servers = i;
-            return CHIAKI_ERR_MEMORY;
+            err = CHIAKI_ERR_MEMORY;
+            goto cleanup;
         }
         strcpy(session->stun_server_list[i].host, ptr);
         ptr = strtok(NULL, ":");
         if(ptr == NULL)
         {
             CHIAKI_LOGW(session->log, "Problem reading stun server list port");
+            free(session->stun_server_list[i].host);
+            session->stun_server_list[i].host = NULL;
             session->num_stun_servers = i;
-            return CHIAKI_ERR_INVALID_DATA;
+            err = CHIAKI_ERR_INVALID_DATA;
+            goto cleanup;
         }
-        session->stun_server_list[i].port = strtol(ptr, NULL, 10);
+        if(!parse_stun_port(ptr, &session->stun_server_list[i].port))
+        {
+            CHIAKI_LOGW(session->log, "Invalid STUN server port: %s", ptr);
+            free(session->stun_server_list[i].host);
+            session->stun_server_list[i].host = NULL;
+            session->num_stun_servers = i;
+            err = CHIAKI_ERR_INVALID_DATA;
+            goto cleanup;
+        }
         ptr = NULL;
     }
 
     free(response_data.data);
-    response_data.data = malloc(0);
+    response_data.data = calloc(1, 1);
     response_data.size = 0;
+    if(!response_data.data)
+    {
+        err = CHIAKI_ERR_MEMORY;
+        goto cleanup;
+    }
     curl_easy_cleanup(curl);
     curl = NULL;
     const char STUN_HOSTS_URL_IPV6[] = "https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_ipv6s.txt";
@@ -6097,7 +6155,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
     if(!curl)
     {
         CHIAKI_LOGE(session->log, "Curl could not init");
-        return CHIAKI_ERR_MEMORY;
+        err = CHIAKI_ERR_MEMORY;
+        goto cleanup;
     }
 
     res = curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
@@ -6132,8 +6191,8 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         }
         goto cleanup;
     }
-    // ipv6 string has max of 45 chars: 39 chars + 2 chars for [] + 1 char for colon : + port has max of 4 chars + 1 char for null termination
-    char server_strings_ipv6[10][47];
+    // After dropping '[', allow a 39-byte IPv6 address, ']', ':', a 5-digit port, optional CR, and NUL.
+    char server_strings_ipv6[10][48];
     ptr = strtok(response_data.data, "\n");
     while(ptr != NULL && session->num_stun_servers_ipv6 <= 9)
     {
@@ -6157,31 +6216,44 @@ static ChiakiErrorCode get_stun_servers(Session *session)
         {
             CHIAKI_LOGW(session->log, "Problem reading stun server list host");
             session->num_stun_servers_ipv6 = i;
-            return CHIAKI_ERR_INVALID_DATA;
+            err = CHIAKI_ERR_INVALID_DATA;
+            goto cleanup;
         }
         session->stun_server_list_ipv6[i].host = malloc((strlen(ptr) + 1) * sizeof(char));
         if(!session->stun_server_list_ipv6[i].host)
         {
             CHIAKI_LOGW(session->log, "Problem allocating memory for stun server list host");
             session->num_stun_servers_ipv6 = i;
-            return CHIAKI_ERR_MEMORY;
+            err = CHIAKI_ERR_MEMORY;
+            goto cleanup;
         }
         strcpy(session->stun_server_list_ipv6[i].host, ptr);
         ptr = strtok(NULL, "]");
         if(ptr == NULL)
         {
             CHIAKI_LOGW(session->log, "Problem reading stun server list port");
+            free(session->stun_server_list_ipv6[i].host);
+            session->stun_server_list_ipv6[i].host = NULL;
             session->num_stun_servers_ipv6 = i;
-            return CHIAKI_ERR_INVALID_DATA;
+            err = CHIAKI_ERR_INVALID_DATA;
+            goto cleanup;
         }
-        // omit :
-        session->stun_server_list_ipv6[i].port = strtol(ptr + 1, NULL, 10);
+        if(ptr[0] != ':' || !parse_stun_port(ptr + 1, &session->stun_server_list_ipv6[i].port))
+        {
+            CHIAKI_LOGW(session->log, "Invalid IPv6 STUN server port: %s", ptr);
+            free(session->stun_server_list_ipv6[i].host);
+            session->stun_server_list_ipv6[i].host = NULL;
+            session->num_stun_servers_ipv6 = i;
+            err = CHIAKI_ERR_INVALID_DATA;
+            goto cleanup;
+        }
         ptr = NULL;
     }
 
 cleanup:
     free(response_data.data);
-    curl_easy_cleanup(curl);
+    if(curl)
+        curl_easy_cleanup(curl);
     return err;
 }
 
