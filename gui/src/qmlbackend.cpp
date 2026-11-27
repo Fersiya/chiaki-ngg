@@ -1160,7 +1160,7 @@ void QmlBackend::createSession(const StreamSessionConnectInfo &connect_info)
     });
 
     StreamSession *session_for_connections = session;
-    connect(session, &StreamSession::SessionQuit, this, [this, session_for_connections](ChiakiQuitПричина reason, const QString &reason_str) {
+    connect(session, &StreamSession::SessionQuit, this, [this, session_for_connections](ChiakiQuitReason reason, const QString &reason_str) {
         if (session != session_for_connections)
             return;
 
