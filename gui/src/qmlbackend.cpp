@@ -434,7 +434,7 @@ QmlBackend::QmlBackend(Settings *settings, QmlMainWindow *window)
         }
     });
     psn_auto_connect_timer->start(PSN_INTERNET_WAIT_SECONDS * 1000);
-    sleep_inhibit = new SystemdInhibit(QGuiApplication::applicationName(), tr("Remote Play session"), "sleep", "delay", this);
+    sleep_inhibit = new SystemdInhibit(QGuiApplication::applicationName(), tr("Сеанс Remote Play"), "sleep", "delay", this);
     connect(sleep_inhibit, &SystemdInhibit::sleep, this, &QmlBackend::goToSleep);
     connect(sleep_inhibit, &SystemdInhibit::resume, this, &QmlBackend::resumeFromSleep);
     connect(ControllerManager::GetInstance(), &ControllerManager::ControllerMoved, sleep_inhibit, &SystemdInhibit::simulateUserActivity);
@@ -710,7 +710,7 @@ void QmlBackend::profileChanged()
         psnToken->RefreshPsnToken(std::move(refresh_token));
     });
     sleep_inhibit->deleteLater();
-    sleep_inhibit = new SystemdInhibit(QGuiApplication::applicationName(), tr("Remote Play session"), "sleep", "delay", this);
+    sleep_inhibit = new SystemdInhibit(QGuiApplication::applicationName(), tr("Сеанс Remote Play"), "sleep", "delay", this);
     connect(sleep_inhibit, &SystemdInhibit::sleep, this, &QmlBackend::goToSleep);
     connect(sleep_inhibit, &SystemdInhibit::resume, this, &QmlBackend::resumeFromSleep);
     connect(ControllerManager::GetInstance(), &ControllerManager::ControllerMoved, sleep_inhibit, &SystemdInhibit::simulateUserActivity);
@@ -752,7 +752,7 @@ void QmlBackend::checkNickname(QString nickname)
         return;
     if(!settings->GetNicknameRegisteredHostRegistered(nickname))
     {
-        emit error(tr("PS4 Console Unregistered"), tr("Can't proceed...please register your PS4 console locally"));
+        emit error(tr("Консоль PS4 не зарегистрирована"), tr("Невозможно продолжить: сначала зарегистрируйте консоль PS4 локально"));
         session->Stop();
     }
 }
@@ -945,7 +945,7 @@ void QmlBackend::startSession(bool emit_session_changed)
         }
         teardownSession();
         emit sessionChanged(nullptr);
-        emit error(tr("Stream failed"), tr("Failed to start Stream Session: %1").arg(e.what()));
+        emit error(tr("Ошибка трансляции"), tr("Не удалось запустить сеанс трансляции: %1").arg(e.what()));
         return;
     }
 
@@ -1116,7 +1116,7 @@ void QmlBackend::createSession(const StreamSessionConnectInfo &connect_info)
     try {
         session = new StreamSession(session_info, this);
     } catch (const Exception &e) {
-        emit error(tr("Stream failed"), tr("Failed to initialize Stream Session: %1").arg(e.what()));
+        emit error(tr("Ошибка трансляции"), tr("Не удалось инициализировать сеанс трансляции: %1").arg(e.what()));
         return;
     }
 
@@ -1160,15 +1160,15 @@ void QmlBackend::createSession(const StreamSessionConnectInfo &connect_info)
     });
 
     StreamSession *session_for_connections = session;
-    connect(session, &StreamSession::SessionQuit, this, [this, session_for_connections](ChiakiQuitReason reason, const QString &reason_str) {
+    connect(session, &StreamSession::SessionQuit, this, [this, session_for_connections](ChiakiQuitПричина reason, const QString &reason_str) {
         if (session != session_for_connections)
             return;
 
         if (chiaki_quit_reason_is_error(reason)) {
-            QString m = tr("Chiaki Session has quit") + ":\n" + chiaki_quit_reason_string(reason);
+            QString m = tr("Сеанс Chiaki завершён") + ":\n" + chiaki_quit_reason_string(reason);
             if (!reason_str.isEmpty())
-                m += "\n" + tr("Reason") + ": \"" + reason_str + "\"";
-            emit sessionError(tr("Session has quit"), m);
+                m += "\n" + tr("Причина") + ": \"" + reason_str + "\"";
+            emit sessionError(tr("Сеанс завершён"), m);
         }
 
         chiaki_log_mutex.lock();
@@ -1393,7 +1393,7 @@ bool QmlBackend::registerHost(const QString &host, const QString &psn_id, const 
     } else {
         QByteArray account_id = QByteArray::fromBase64(psn_id.toUtf8());
         if (account_id.size() != CHIAKI_PSN_ACCOUNT_ID_SIZE) {
-            emit error(tr("Invalid Account-ID"), tr("The PSN Account-ID must be exactly %1 bytes encoded as base64.").arg(CHIAKI_PSN_ACCOUNT_ID_SIZE));
+            emit error(tr("Неверный ID учётной записи"), tr("ID учётной записи PSN должен содержать ровно %1 байт в кодировке Base64.").arg(CHIAKI_PSN_ACCOUNT_ID_SIZE));
             return false;
         }
         info.psn_online_id = nullptr;
@@ -1481,7 +1481,7 @@ void QmlBackend::finishAutoRegister(const ChiakiRegisteredHost &host)
     QString nickname(host.server_nickname);
     if(!regist_dialog_server.discovery_host.ps5 && regist_dialog_server.discovery_host.host_name != nickname)
     {
-        emit error(tr("PS4 Console Not Main"), tr("Can't proceed...%1 is not your main PS4 console in PSN").arg(regist_dialog_server.discovery_host.host_name));
+        emit error(tr("Консоль PS4 не является основной"), tr("Невозможно продолжить: %1 не назначена основной консолью PS4 в PSN").arg(regist_dialog_server.discovery_host.host_name));
         return;
     }
     settings->AddRegisteredHost(host);
@@ -1839,7 +1839,7 @@ bool QmlBackend::sendWakeup(const QString &host, const QByteArray &regist_key, b
         discovery_manager.SendWakeup(host, regist_key, ps5);
         return true;
     } catch (const Exception &e) {
-        emit error(tr("Wakeup failed"), tr("Failed to send Wakeup packet:\n%1").arg(e.what()));
+        emit error(tr("Не удалось разбудить консоль"), tr("Не удалось отправить пакет пробуждения:\n%1").arg(e.what()));
         return false;
     }
 }
