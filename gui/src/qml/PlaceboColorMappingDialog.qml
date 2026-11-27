@@ -121,7 +121,7 @@ DialogView {
                     C.ComboBox {
                         Layout.preferredWidth: 400
                         firstInFocusChain: true
-                        model: [qsTr("Обрезка"), qsTr("Перцептивный"), qsTr("Soft Обрезка"), qsTr("Относительный"), qsTr("Насыщенность"), qsTr("Абсолютный"), qsTr("Обесцветить"), qsTr("Затемнить"), qsTr("Светлые участки"), qsTr("Линейный")]
+                        model: [qsTr("Обрезка"), qsTr("Перцептивный"), qsTr("Мягкая обрезка"), qsTr("Относительный"), qsTr("Насыщенность"), qsTr("Абсолютный"), qsTr("Обесцветить"), qsTr("Затемнить"), qsTr("Светлые участки"), qsTr("Линейный")]
                         currentIndex: Chiaki.settings.placeboGamutMappingFunction
                         onActivated: index => Chiaki.settings.placeboGamutMappingFunction = index
                     }
@@ -439,7 +439,7 @@ DialogView {
                     C.ComboBox {
                         Layout.preferredWidth: 400
                         firstInFocusChain: true
-                        model: [qsTr("Обрезка"), qsTr("Spline"), qsTr("St2094-40"), qsTr("St-2094-10"), qsTr("Bt2390"), qsTr("Bt2446a"), qsTr("Reinhard"), qsTr("Mobius"), qsTr("Hable"), qsTr("Gamma"), qsTr("Линейный"), qsTr("Линейный Light")]
+                        model: [qsTr("Обрезка"), qsTr("Сплайн"), qsTr("ST 2094-40"), qsTr("ST 2094-10"), qsTr("BT.2390"), qsTr("BT.2446a"), qsTr("Рейнхард"), qsTr("Мёбиус"), qsTr("Хейбл"), qsTr("Гамма"), qsTr("Линейный"), qsTr("Линейный свет")]
                         currentIndex: Chiaki.settings.placeboToneMappingFunction
                         onActivated: index => Chiaki.settings.placeboToneMappingFunction = index
                     }
@@ -841,7 +841,7 @@ DialogView {
                     C.ComboBox {
                         Layout.preferredWidth: 400
                         firstInFocusChain: true
-                        model: [qsTr("Любые"), qsTr("Нет"), qsTr("HDR10"), qsTr("HDR10 Plus"), qsTr("Cie_y")]
+                        model: [qsTr("Любые"), qsTr("Нет"), qsTr("HDR10"), qsTr("HDR10+"), qsTr("Cie_y")]
                         currentIndex: Chiaki.settings.placeboToneMappingMetadata
                         onActivated: index => Chiaki.settings.placeboToneMappingMetadata = index
                     }
